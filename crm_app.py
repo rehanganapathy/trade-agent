@@ -1133,13 +1133,17 @@ def api_fill():
         autofill_data = get_autofill_data(vector_db, prompt, template_name)
 
     # Fill form using AI
-    filled = fill_form(template, prompt, autofill_data, auto_classify_hs)
+    filled = fill_form(template, prompt, use_openai=True, db_data=autofill_data, auto_classify_hs=auto_classify_hs)
 
     # Save to vector DB if requested
     if save_to_db and vector_db:
         vector_db.add_submission(template_name, filled)
 
-    return jsonify(filled)
+    return jsonify({
+        "filled": filled,
+        "from_db": bool(autofill_data),
+        "template": template_name
+    })
 
 
 @app.route("/api/classify-hs", methods=["POST"])
@@ -1153,9 +1157,16 @@ def api_classify_hs():
     if not hs_classifier_available:
         return jsonify({"error": "HS classifier not available"}), 503
 
+    if not product_description or not product_description.strip():
+        return jsonify({"error": "Product description is required"}), 400
+
     results = hs_classifier.classify(product_description, top_n=top_n)
 
-    return jsonify(results)
+    return jsonify({
+        "suggestions": results,
+        "count": len(results),
+        "product_description": product_description
+    })
 
 
 @app.route("/api/templates", methods=["GET"])

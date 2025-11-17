@@ -1172,6 +1172,18 @@
                 </div>
 
                 <div class="nav-section">
+                    <div class="nav-section-title">AI Tools</div>
+                    <a class="nav-item" data-page="hs-classifier">
+                        <i class="fas fa-brain"></i>
+                        <span>HS Code Classifier</span>
+                    </a>
+                    <a class="nav-item" data-page="ai-forms">
+                        <i class="fas fa-robot"></i>
+                        <span>AI Form Filling</span>
+                    </a>
+                </div>
+
+                <div class="nav-section">
                     <div class="nav-section-title">Analytics</div>
                     <a class="nav-item" data-page="reports">
                         <i class="fas fa-chart-bar"></i>
@@ -1411,6 +1423,79 @@
                     </div>
                 </div>
 
+                <!-- HS Code Classifier Page -->
+                <div id="hs-classifierContent" class="hidden">
+                    <div class="table-card">
+                        <div class="table-header">
+                            <h3 class="table-title">AI-Powered HS Code Classification</h3>
+                            <div class="table-actions">
+                                <button class="btn btn-secondary btn-sm" onclick="clearHSClassifier()">
+                                    <i class="fas fa-eraser"></i>
+                                    Clear
+                                </button>
+                            </div>
+                        </div>
+                        <div style="padding: 30px;">
+                            <div class="form-group">
+                                <label class="form-label">Product Description</label>
+                                <textarea id="hsProductDescription" class="form-control" rows="4" placeholder="Enter detailed product description (e.g., 'Wireless Bluetooth headphones with noise cancellation, over-ear design, lithium battery')"></textarea>
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label">Number of Suggestions</label>
+                                <select id="hsTopN" class="form-control">
+                                    <option value="3">Top 3</option>
+                                    <option value="5" selected>Top 5</option>
+                                    <option value="10">Top 10</option>
+                                </select>
+                            </div>
+                            <button class="btn btn-primary" onclick="classifyHSCode()">
+                                <i class="fas fa-brain"></i>
+                                Classify HS Code
+                            </button>
+                            <div id="hsClassificationResults" style="margin-top: 30px;"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- AI Forms Page -->
+                <div id="ai-formsContent" class="hidden">
+                    <div class="table-card">
+                        <div class="table-header">
+                            <h3 class="table-title">AI Trade Document Filling</h3>
+                        </div>
+                        <div style="padding: 30px;">
+                            <div class="form-group">
+                                <label class="form-label">Select Form Template</label>
+                                <select id="aiFormTemplate" class="form-control"></select>
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label">Trade Information (Natural Language)</label>
+                                <textarea id="aiFormPrompt" class="form-control" rows="6" placeholder="Paste or type your trade information here...
+Example: 'Shipment of 100 units of wireless headphones from Shenzhen, China to Los Angeles, USA. Value $5000. Weight 50kg. Buyer: ABC Corp.'"></textarea>
+                            </div>
+                            <div style="display: flex; gap: 10px; margin-bottom: 20px;">
+                                <label style="display: flex; align-items: center; gap: 8px; cursor: pointer;">
+                                    <input type="checkbox" id="aiFormUseDB" checked>
+                                    <span>Use historical data for autofill</span>
+                                </label>
+                                <label style="display: flex; align-items: center; gap: 8px; cursor: pointer;">
+                                    <input type="checkbox" id="aiFormSaveDB" checked>
+                                    <span>Save to database</span>
+                                </label>
+                                <label style="display: flex; align-items: center; gap: 8px; cursor: pointer;">
+                                    <input type="checkbox" id="aiFormClassifyHS" checked>
+                                    <span>Auto-classify HS codes</span>
+                                </label>
+                            </div>
+                            <button class="btn btn-primary" onclick="fillAIForm()">
+                                <i class="fas fa-robot"></i>
+                                Generate Form with AI
+                            </button>
+                            <div id="aiFormResults" style="margin-top: 30px;"></div>
+                        </div>
+                    </div>
+                </div>
+
                 <!-- Other page contents will be loaded dynamically -->
                 <div id="contactsContent" class="hidden"></div>
                 <div id="leadsContent" class="hidden"></div>
@@ -1429,7 +1514,7 @@
 
     <!-- Create Company Modal -->
     <div class="modal-overlay" id="createCompanyModal">
-        <div class="modal">
+        <div class="modal" style="max-width: 900px;">
             <div class="modal-header">
                 <h3 class="modal-title">Add New Company</h3>
                 <button class="modal-close" onclick="closeModal('createCompanyModal')">
@@ -1438,6 +1523,22 @@
             </div>
 
             <div class="modal-body">
+                <!-- AI Assistant Panel -->
+                <div style="background: rgba(99, 102, 241, 0.05); border: 1px solid rgba(99, 102, 241, 0.2); border-radius: 12px; padding: 20px; margin-bottom: 25px;">
+                    <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 15px;">
+                        <i class="fas fa-robot" style="font-size: 24px; color: var(--primary-color);"></i>
+                        <div>
+                            <h4 style="margin: 0; color: var(--primary-color);">AI Assistant</h4>
+                            <p style="margin: 0; font-size: 13px; color: var(--text-muted);">Paste company information and let AI fill the form</p>
+                        </div>
+                    </div>
+                    <textarea id="companyAIInput" class="form-control" rows="3" placeholder="Paste company details here (e.g., 'Acme Trading Corp, customer based in Los Angeles, email: contact@acme.com, phone: +1-555-0100')"></textarea>
+                    <button type="button" class="btn btn-primary btn-sm" onclick="fillCompanyWithAI()" style="margin-top: 10px;">
+                        <i class="fas fa-magic"></i>
+                        Auto-Fill with AI
+                    </button>
+                </div>
+
                 <form id="createCompanyForm">
                     <div class="grid grid-2">
                         <div class="form-group">
@@ -2042,12 +2143,329 @@
                     document.getElementById('appContainer').classList.remove('hidden');
                     updateUserInfo();
                     loadDashboard();
+                    loadAIFormTemplates();
                 })
                 .catch(() => {
                     // Token invalid, clear it
                     localStorage.removeItem('authToken');
                     authToken = null;
                 });
+        }
+
+        // ============================================
+        // AI Form Filling Functions
+        // ============================================
+
+        // Load available form templates for AI form filling
+        async function loadAIFormTemplates() {
+            try {
+                const response = await fetch('/api/templates');
+                const data = await response.json();
+
+                const select = document.getElementById('aiFormTemplate');
+                if (select && data.templates) {
+                    select.innerHTML = data.templates.map(t =>
+                        `<option value="${t.name}">${t.name.replace('.json', '').replace(/_/g, ' ')}</option>`
+                    ).join('');
+                }
+            } catch (error) {
+                console.error('Error loading templates:', error);
+            }
+        }
+
+        // Fill company form with AI
+        async function fillCompanyWithAI() {
+            const input = document.getElementById('companyAIInput');
+            const prompt = input.value.trim();
+
+            if (!prompt) {
+                showToast('AI Assistant', 'Please enter company information', 'warning');
+                return;
+            }
+
+            try {
+                showToast('AI Processing', 'Analyzing company information...', 'info');
+
+                // Call AI to extract company data
+                const response = await fetch('/api/fill', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${authToken}`
+                    },
+                    body: JSON.stringify({
+                        template: 'customer_form.json',
+                        prompt: prompt,
+                        use_db: false,
+                        save_to_db: false
+                    })
+                });
+
+                if (!response.ok) throw new Error('AI processing failed');
+
+                const data = await response.json();
+                const form = document.getElementById('createCompanyForm');
+
+                // Map AI extracted data to form fields
+                if (data.filled.company_name || data.filled.name) {
+                    form.querySelector('[name="name"]').value = data.filled.company_name || data.filled.name || '';
+                }
+                if (data.filled.email) {
+                    form.querySelector('[name="email"]').value = data.filled.email || '';
+                }
+                if (data.filled.phone) {
+                    form.querySelector('[name="phone"]').value = data.filled.phone || '';
+                }
+                if (data.filled.website) {
+                    form.querySelector('[name="website"]').value = data.filled.website || '';
+                }
+                if (data.filled.address || data.filled.address_line1) {
+                    form.querySelector('[name="address_line1"]').value = data.filled.address || data.filled.address_line1 || '';
+                }
+                if (data.filled.city) {
+                    form.querySelector('[name="city"]').value = data.filled.city || '';
+                }
+                if (data.filled.country) {
+                    form.querySelector('[name="country"]').value = data.filled.country || '';
+                }
+                if (data.filled.notes || data.filled.description) {
+                    form.querySelector('[name="notes"]').value = data.filled.notes || data.filled.description || '';
+                }
+
+                // Try to detect company type from prompt
+                const lowerPrompt = prompt.toLowerCase();
+                const typeSelect = form.querySelector('[name="company_type"]');
+                if (lowerPrompt.includes('supplier')) {
+                    typeSelect.value = 'SUPPLIER';
+                } else if (lowerPrompt.includes('customer') || lowerPrompt.includes('buyer')) {
+                    typeSelect.value = 'CUSTOMER';
+                } else if (lowerPrompt.includes('partner')) {
+                    typeSelect.value = 'PARTNER';
+                } else if (lowerPrompt.includes('prospect') || lowerPrompt.includes('lead')) {
+                    typeSelect.value = 'PROSPECT';
+                }
+
+                showToast('Success', 'Form filled with AI! Review and submit.', 'success');
+            } catch (error) {
+                console.error('AI Error:', error);
+                showToast('Error', 'Failed to process with AI: ' + error.message, 'error');
+            }
+        }
+
+        // Fill AI form (trade documents)
+        async function fillAIForm() {
+            const template = document.getElementById('aiFormTemplate').value;
+            const prompt = document.getElementById('aiFormPrompt').value;
+            const useDB = document.getElementById('aiFormUseDB').checked;
+            const saveToDB = document.getElementById('aiFormSaveDB').checked;
+            const classifyHS = document.getElementById('aiFormClassifyHS').checked;
+            const resultsDiv = document.getElementById('aiFormResults');
+
+            if (!prompt.trim()) {
+                showToast('Input Required', 'Please enter trade information', 'warning');
+                return;
+            }
+
+            try {
+                resultsDiv.innerHTML = '<div class="spinner"></div>';
+                showToast('AI Processing', 'Generating form with AI...', 'info');
+
+                const response = await fetch('/api/fill', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${authToken}`
+                    },
+                    body: JSON.stringify({
+                        template: template,
+                        prompt: prompt,
+                        use_db: useDB,
+                        save_to_db: saveToDB,
+                        auto_classify_hs: classifyHS
+                    })
+                });
+
+                if (!response.ok) {
+                    const error = await response.json();
+                    throw new Error(error.error || 'Failed to generate form');
+                }
+
+                const data = await response.json();
+
+                // Display results in a beautiful card format
+                let html = '<div style="background: var(--bg-card); border: 1px solid var(--border-color); border-radius: 12px; padding: 25px;">';
+                html += '<h3 style="margin-bottom: 20px; color: var(--success-color);"><i class="fas fa-check-circle"></i> Form Generated Successfully</h3>';
+
+                if (data.from_db) {
+                    html += '<div style="background: rgba(59, 130, 246, 0.1); border-left: 4px solid var(--info-color); padding: 12px; margin-bottom: 20px; border-radius: 8px;">';
+                    html += '<i class="fas fa-database"></i> Data retrieved from historical records';
+                    html += '</div>';
+                }
+
+                html += '<div class="grid grid-2" style="gap: 15px;">';
+                for (const [key, value] of Object.entries(data.filled)) {
+                    const label = key.replace(/_/g, ' ').replace(/\b\w/g, l => l.toUpperCase());
+                    const displayValue = value || '(not filled)';
+                    const isHSCode = key.toLowerCase().includes('hs_code') || key.toLowerCase().includes('hscode');
+
+                    html += '<div style="background: var(--bg-tertiary); padding: 15px; border-radius: 8px;">';
+                    html += `<div style="font-size: 12px; color: var(--text-muted); margin-bottom: 5px; text-transform: uppercase; letter-spacing: 0.5px;">${label}</div>`;
+                    html += `<div style="font-size: 15px; font-weight: 500; color: var(--text-primary);">${displayValue}</div>`;
+                    if (isHSCode && value) {
+                        html += '<div style="margin-top: 8px;"><span class="status-badge success"><i class="fas fa-check"></i> Classified</span></div>';
+                    }
+                    html += '</div>';
+                }
+                html += '</div>';
+
+                // Add export buttons
+                html += '<div style="margin-top: 25px; display: flex; gap: 10px;">';
+                html += `<button class="btn btn-primary" onclick='downloadFormJSON(${JSON.stringify(data.filled)}, "${template}")'>`;
+                html += '<i class="fas fa-download"></i> Download JSON';
+                html += '</button>';
+                html += `<button class="btn btn-secondary" onclick='copyFormData(${JSON.stringify(data.filled)})'>`;
+                html += '<i class="fas fa-copy"></i> Copy to Clipboard';
+                html += '</button>';
+                html += '</div>';
+
+                html += '</div>';
+
+                resultsDiv.innerHTML = html;
+                showToast('Success', 'Form generated successfully!', 'success');
+            } catch (error) {
+                console.error('Error:', error);
+                resultsDiv.innerHTML = `
+                    <div style="background: rgba(239, 68, 68, 0.1); border: 1px solid var(--danger-color); border-radius: 12px; padding: 25px; text-align: center;">
+                        <i class="fas fa-exclamation-triangle" style="font-size: 48px; color: var(--danger-color); margin-bottom: 15px;"></i>
+                        <h4 style="color: var(--danger-color); margin-bottom: 10px;">Error Generating Form</h4>
+                        <p style="color: var(--text-muted);">${error.message}</p>
+                    </div>
+                `;
+                showToast('Error', error.message, 'error');
+            }
+        }
+
+        function downloadFormJSON(data, template) {
+            const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `${template.replace('.json', '')}_${Date.now()}.json`;
+            a.click();
+            URL.revokeObjectURL(url);
+        }
+
+        function copyFormData(data) {
+            navigator.clipboard.writeText(JSON.stringify(data, null, 2))
+                .then(() => showToast('Copied', 'Form data copied to clipboard', 'success'))
+                .catch(() => showToast('Error', 'Failed to copy', 'error'));
+        }
+
+        // ============================================
+        // HS Code Classification Functions
+        // ============================================
+
+        async function classifyHSCode() {
+            const description = document.getElementById('hsProductDescription').value.trim();
+            const topN = parseInt(document.getElementById('hsTopN').value);
+            const resultsDiv = document.getElementById('hsClassificationResults');
+
+            if (!description) {
+                showToast('Input Required', 'Please enter a product description', 'warning');
+                return;
+            }
+
+            try {
+                resultsDiv.innerHTML = '<div class="spinner"></div>';
+                showToast('AI Classifying', 'Analyzing product description...', 'info');
+
+                const response = await fetch('/api/classify-hs', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${authToken}`
+                    },
+                    body: JSON.stringify({
+                        product_description: description,
+                        top_n: topN
+                    })
+                });
+
+                if (!response.ok) {
+                    const error = await response.json();
+                    throw new Error(error.error || 'Classification failed');
+                }
+
+                const data = await response.json();
+
+                if (!data.suggestions || data.suggestions.length === 0) {
+                    resultsDiv.innerHTML = `
+                        <div style="text-align: center; padding: 40px; color: var(--text-muted);">
+                            <i class="fas fa-search" style="font-size: 48px; margin-bottom: 15px; opacity: 0.3;"></i>
+                            <p>No HS code suggestions found for this product</p>
+                        </div>
+                    `;
+                    return;
+                }
+
+                // Display results
+                let html = '<div style="background: var(--bg-card); border: 1px solid var(--border-color); border-radius: 12px; padding: 25px;">';
+                html += '<h3 style="margin-bottom: 20px;"><i class="fas fa-brain"></i> HS Code Suggestions</h3>';
+
+                data.suggestions.forEach((suggestion, index) => {
+                    const confidence = Math.round((suggestion.confidence || 0) * 100);
+                    const confidenceColor = confidence >= 80 ? 'var(--success-color)' :
+                                           confidence >= 60 ? 'var(--warning-color)' :
+                                           'var(--danger-color)';
+
+                    html += `<div style="background: var(--bg-tertiary); border-radius: 12px; padding: 20px; margin-bottom: 15px; border-left: 4px solid ${confidenceColor};">`;
+                    html += '<div style="display: flex; justify-content: space-between; align-items: start; margin-bottom: 10px;">';
+                    html += `<div style="font-size: 24px; font-weight: 700; color: var(--primary-color);">${suggestion.hs_code}</div>`;
+                    html += `<div style="background: ${confidenceColor}; color: white; padding: 6px 12px; border-radius: 6px; font-size: 13px; font-weight: 600;">`;
+                    html += `${confidence}% Match`;
+                    html += '</div>';
+                    html += '</div>';
+                    html += `<div style="color: var(--text-secondary); margin-bottom: 10px; line-height: 1.6;">${suggestion.description}</div>`;
+
+                    if (suggestion.reasoning) {
+                        html += `<div style="background: rgba(99, 102, 241, 0.05); padding: 12px; border-radius: 8px; font-size: 13px; color: var(--text-muted); margin-top: 10px;">`;
+                        html += `<strong style="color: var(--primary-color);"><i class="fas fa-lightbulb"></i> Reasoning:</strong> ${suggestion.reasoning}`;
+                        html += '</div>';
+                    }
+
+                    html += `<div style="margin-top: 15px;">`;
+                    html += `<button class="btn btn-primary btn-sm" onclick="copyHSCode('${suggestion.hs_code}')">`;
+                    html += '<i class="fas fa-copy"></i> Copy HS Code';
+                    html += '</button>';
+                    html += '</div>';
+                    html += '</div>';
+                });
+
+                html += '</div>';
+                resultsDiv.innerHTML = html;
+                showToast('Success', `Found ${data.suggestions.length} HS code suggestions`, 'success');
+            } catch (error) {
+                console.error('Error:', error);
+                resultsDiv.innerHTML = `
+                    <div style="background: rgba(239, 68, 68, 0.1); border: 1px solid var(--danger-color); border-radius: 12px; padding: 25px; text-align: center;">
+                        <i class="fas fa-exclamation-triangle" style="font-size: 48px; color: var(--danger-color); margin-bottom: 15px;"></i>
+                        <h4 style="color: var(--danger-color); margin-bottom: 10px;">Classification Error</h4>
+                        <p style="color: var(--text-muted);">${error.message}</p>
+                    </div>
+                `;
+                showToast('Error', error.message, 'error');
+            }
+        }
+
+        function copyHSCode(code) {
+            navigator.clipboard.writeText(code)
+                .then(() => showToast('Copied', `HS Code ${code} copied to clipboard`, 'success'))
+                .catch(() => showToast('Error', 'Failed to copy', 'error'));
+        }
+
+        function clearHSClassifier() {
+            document.getElementById('hsProductDescription').value = '';
+            document.getElementById('hsClassificationResults').innerHTML = '';
         }
     </script>
 </body>
