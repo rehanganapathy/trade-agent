@@ -1817,6 +1817,8 @@ Example: 'Shipment of 100 units of wireless headphones from Shenzhen, China to L
                         loadCompanies();
                     } else if (page === 'orders') {
                         loadOrders();
+                    } else if (page === 'ai-forms') {
+                        loadAIFormTemplates();
                     }
                 }
             });
@@ -2163,7 +2165,11 @@ Example: 'Shipment of 100 units of wireless headphones from Shenzhen, China to L
         // Load available form templates for AI form filling
         async function loadAIFormTemplates() {
             try {
-                const response = await fetch('/api/templates');
+                const response = await fetch('/api/templates', {
+                    headers: {
+                        'Authorization': `Bearer ${authToken}`
+                    }
+                });
                 const data = await response.json();
 
                 const select = document.getElementById('aiFormTemplate');
@@ -2174,6 +2180,7 @@ Example: 'Shipment of 100 units of wireless headphones from Shenzhen, China to L
                 }
             } catch (error) {
                 console.error('Error loading templates:', error);
+                showToast('Error', 'Failed to load form templates', 'error');
             }
         }
 
