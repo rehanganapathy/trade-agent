@@ -20,18 +20,27 @@ def create_users():
 
     users_data = [
         {
-            'email': 'admin@tradepro.com',
+            'email': 'admin@example.com',
             'username': 'admin',
-            'password': 'admin123',
+            'password': 'Admin123!',
             'first_name': 'Admin',
             'last_name': 'User',
             'role': UserRole.ADMIN,
             'phone': '+1-555-0100'
         },
         {
+            'email': 'admin@tradepro.com',
+            'username': 'admin_tradepro',
+            'password': 'Admin123!',
+            'first_name': 'Trade',
+            'last_name': 'Administrator',
+            'role': UserRole.ADMIN,
+            'phone': '+1-555-0100'
+        },
+        {
             'email': 'manager@tradepro.com',
             'username': 'manager',
-            'password': 'manager123',
+            'password': 'Manager123!',
             'first_name': 'Sarah',
             'last_name': 'Manager',
             'role': UserRole.MANAGER,
@@ -40,7 +49,7 @@ def create_users():
         {
             'email': 'sales@tradepro.com',
             'username': 'sales',
-            'password': 'sales123',
+            'password': 'Sales123!',
             'first_name': 'John',
             'last_name': 'Sales',
             'role': UserRole.SALES,
@@ -49,7 +58,7 @@ def create_users():
         {
             'email': 'ops@tradepro.com',
             'username': 'operations',
-            'password': 'ops123',
+            'password': 'Ops123!',
             'first_name': 'Mike',
             'last_name': 'Operations',
             'role': UserRole.OPERATIONS,
@@ -58,7 +67,7 @@ def create_users():
         {
             'email': 'finance@tradepro.com',
             'username': 'finance',
-            'password': 'finance123',
+            'password': 'Finance123!',
             'first_name': 'Emma',
             'last_name': 'Finance',
             'role': UserRole.FINANCE,

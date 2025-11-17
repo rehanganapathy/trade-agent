@@ -103,7 +103,20 @@ def _list_form_templates() -> List[str]:
 
 @app.route("/")
 def index():
-    """Main dashboard"""
+    """Redirect to CRM dashboard"""
+    from flask import redirect
+    return redirect('/crm')
+
+
+@app.route("/crm")
+def crm_dashboard():
+    """CRM Dashboard - Main Application Interface"""
+    return render_template("crm_dashboard.html")
+
+
+@app.route("/legacy")
+def legacy_index():
+    """Legacy trade form interface"""
     template_files = _list_form_templates()
     db_available = vector_db is not None
     return render_template("index.html", templates=template_files, db_available=db_available)
