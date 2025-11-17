@@ -1227,6 +1227,34 @@ def get_dashboard_analytics():
         Invoice.payment_status.in_([PaymentStatus.PENDING, PaymentStatus.PARTIAL])
     ).count()
 
+    # Calculate monthly revenue trend for the last 12 months
+    today = datetime.now()
+    revenue_trend = []
+    month_labels = []
+
+    for i in range(11, -1, -1):  # Last 12 months
+        # Calculate the start and end of the month
+        month_date = today - timedelta(days=30 * i)
+        month_start = month_date.replace(day=1, hour=0, minute=0, second=0, microsecond=0)
+
+        # Calculate next month start
+        if month_start.month == 12:
+            next_month_start = month_start.replace(year=month_start.year + 1, month=1)
+        else:
+            next_month_start = month_start.replace(month=month_start.month + 1)
+
+        # Query revenue for this month
+        month_revenue = db.session.query(func.sum(Order.total_amount)).filter(
+            and_(
+                Order.order_date >= month_start.date(),
+                Order.order_date < next_month_start.date(),
+                Order.payment_status == PaymentStatus.PAID
+            )
+        ).scalar() or 0
+
+        revenue_trend.append(float(month_revenue))
+        month_labels.append(month_start.strftime('%b'))
+
     # Recent activity
     recent_orders = Order.query.order_by(Order.created_at.desc()).limit(5).all()
     recent_shipments = Shipment.query.order_by(Shipment.created_at.desc()).limit(5).all()
@@ -1238,6 +1266,10 @@ def get_dashboard_analytics():
             'total_revenue': float(total_revenue),
             'pending_orders': pending_orders,
             'open_invoices': open_invoices
+        },
+        'revenue_trend': {
+            'labels': month_labels,
+            'data': revenue_trend
         },
         'recent_orders': [o.to_dict() for o in recent_orders],
         'recent_shipments': [s.to_dict() for s in recent_shipments]
