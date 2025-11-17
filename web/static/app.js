@@ -430,153 +430,195 @@ function viewHistoryItem(data) {
 }
 
 // ============================================
-// Export Functions - PDF
+// Export Functions - PDF (Functional Approach)
 // ============================================
 
+// PDF Theme Configuration
+const PDF_THEME = {
+    colors: {
+        primary: [102, 126, 234],
+        text: [50, 50, 50],
+        lightGray: [150, 150, 150],
+        background: [248, 249, 253],
+        white: [255, 255, 255]
+    },
+    fonts: {
+        title: 24,
+        subtitle: 12,
+        header: 11,
+        body: 10,
+        small: 9,
+        footer: 8
+    },
+    margins: { left: 20, right: 20 }
+};
+
+// Pure function to create PDF document
+const createPDFDocument = () => {
+    const { jsPDF } = window.jspdf;
+    return new jsPDF();
+};
+
+// Pure function to add header to PDF
+const addPDFHeader = (doc, title, subtitle, metaInfo = {}) => {
+    // Background
+    doc.setFillColor(...PDF_THEME.colors.primary);
+    doc.rect(0, 0, 210, 40, 'F');
+
+    // Title
+    doc.setTextColor(...PDF_THEME.colors.white);
+    doc.setFontSize(PDF_THEME.fonts.title);
+    doc.setFont(undefined, 'bold');
+    doc.text('Trade CRM', 20, 25);
+
+    // Subtitle
+    doc.setFontSize(PDF_THEME.fonts.subtitle);
+    doc.setFont(undefined, 'normal');
+    doc.text(subtitle, 20, 33);
+
+    // Meta info (right side)
+    doc.setTextColor(...PDF_THEME.colors.text);
+    doc.setFontSize(PDF_THEME.fonts.body);
+    let yPos = 25;
+    Object.entries(metaInfo).forEach(([key, value]) => {
+        doc.text(`${key}: ${value}`, 150, yPos, { align: 'right' });
+        yPos += 6;
+    });
+
+    return doc;
+};
+
+// Pure function to add footer with page numbers
+const addPDFFooter = (doc) => {
+    const pageCount = doc.internal.getNumberOfPages();
+    const pageHeight = doc.internal.pageSize.height;
+    const pageWidth = doc.internal.pageSize.width;
+
+    for (let i = 1; i <= pageCount; i++) {
+        doc.setPage(i);
+        doc.setFontSize(PDF_THEME.fonts.footer);
+        doc.setTextColor(...PDF_THEME.colors.lightGray);
+        doc.text(
+            `Page ${i} of ${pageCount}`,
+            pageWidth / 2,
+            pageHeight - 10,
+            { align: 'center' }
+        );
+    }
+
+    return doc;
+};
+
+// Pure function to create table configuration
+const createTableConfig = (head, body, startY = 50) => ({
+    startY,
+    head: [head],
+    body,
+    theme: 'striped',
+    headStyles: {
+        fillColor: PDF_THEME.colors.primary,
+        fontSize: PDF_THEME.fonts.header,
+        fontStyle: 'bold',
+        textColor: PDF_THEME.colors.white
+    },
+    bodyStyles: {
+        fontSize: PDF_THEME.fonts.body,
+        textColor: PDF_THEME.colors.text
+    },
+    alternateRowStyles: {
+        fillColor: PDF_THEME.colors.background
+    },
+    margin: PDF_THEME.margins
+});
+
+// Pure function to transform form data to table rows
+const formDataToTableRows = (data) =>
+    Object.entries(data).map(([key, value]) => [
+        formatLabel(key),
+        value || '(not filled)'
+    ]);
+
+// Pure function to transform history to summary rows
+const historyToSummaryRows = (history) =>
+    history.map((item, index) => {
+        const date = new Date(item.timestamp || Date.now());
+        return [
+            index + 1,
+            date.toLocaleString(),
+            item.template || 'Unknown',
+            `${Object.keys(item.data || {}).length} fields`
+        ];
+    });
+
+// Main PDF export function (composable)
+const generatePDF = ({ title, subtitle, metaInfo, tableConfig, filename }) => {
+    try {
+        const doc = createPDFDocument();
+        addPDFHeader(doc, title, subtitle, metaInfo);
+        doc.autoTable(tableConfig);
+        addPDFFooter(doc);
+        doc.save(filename);
+        return { success: true };
+    } catch (error) {
+        return { success: false, error };
+    }
+};
+
+// Export current form to PDF
 function exportToPDF() {
     if (!currentOutput || Object.keys(currentOutput).length === 0) {
-        alert('No data to export. Please fill a form first.');
+        showStatus('No data to export. Please fill a form first.', 'error');
         return;
     }
 
-    try {
-        const { jsPDF } = window.jspdf;
-        const doc = new jsPDF();
+    const template = document.getElementById('template-select').value;
+    const result = generatePDF({
+        title: 'Trade CRM',
+        subtitle: 'Form Data Export',
+        metaInfo: {
+            'Generated': new Date().toLocaleString(),
+            'Template': template
+        },
+        tableConfig: createTableConfig(
+            ['Field', 'Value'],
+            formDataToTableRows(currentOutput)
+        ),
+        filename: `trade_form_${Date.now()}.pdf`
+    });
 
-        // Add header
-        doc.setFillColor(102, 126, 234);
-        doc.rect(0, 0, 210, 40, 'F');
-
-        doc.setTextColor(255, 255, 255);
-        doc.setFontSize(24);
-        doc.setFont(undefined, 'bold');
-        doc.text('Trade CRM', 20, 25);
-
-        doc.setFontSize(12);
-        doc.setFont(undefined, 'normal');
-        doc.text('Form Data Export', 20, 33);
-
-        // Add export info
-        doc.setTextColor(100, 100, 100);
-        doc.setFontSize(10);
-        doc.text(`Generated: ${new Date().toLocaleString()}`, 150, 25, { align: 'right' });
-        doc.text(`Template: ${document.getElementById('template-select').value}`, 150, 31, { align: 'right' });
-
-        // Prepare table data
-        const tableData = Object.entries(currentOutput).map(([key, value]) => [
-            formatLabel(key),
-            value || '(not filled)'
-        ]);
-
-        // Add table
-        doc.autoTable({
-            startY: 50,
-            head: [['Field', 'Value']],
-            body: tableData,
-            theme: 'striped',
-            headStyles: {
-                fillColor: [102, 126, 234],
-                fontSize: 11,
-                fontStyle: 'bold',
-                textColor: [255, 255, 255]
-            },
-            bodyStyles: {
-                fontSize: 10,
-                textColor: [50, 50, 50]
-            },
-            alternateRowStyles: {
-                fillColor: [248, 249, 253]
-            },
-            margin: { left: 20, right: 20 }
-        });
-
-        // Add footer
-        const pageCount = doc.internal.getNumberOfPages();
-        for (let i = 1; i <= pageCount; i++) {
-            doc.setPage(i);
-            doc.setFontSize(9);
-            doc.setTextColor(150, 150, 150);
-            doc.text(
-                `Page ${i} of ${pageCount}`,
-                doc.internal.pageSize.width / 2,
-                doc.internal.pageSize.height - 10,
-                { align: 'center' }
-            );
-        }
-
-        // Save the PDF
-        const filename = `trade_form_${Date.now()}.pdf`;
-        doc.save(filename);
-
+    if (result.success) {
         showStatus('PDF exported successfully!', 'success');
         setTimeout(() => statusEl.style.display = 'none', 2000);
-    } catch (err) {
-        console.error('PDF export error:', err);
-        showStatus('Failed to export PDF: ' + err.message, 'error');
+    } else {
+        console.error('PDF export error:', result.error);
+        showStatus('Failed to export PDF: ' + result.error.message, 'error');
     }
 }
 
+// Export single history item to PDF
 function exportHistoryItemPDF(item) {
-    try {
-        const { jsPDF } = window.jspdf;
-        const doc = new jsPDF();
+    const date = new Date(item.timestamp || Date.now());
+    const result = generatePDF({
+        title: 'Trade CRM',
+        subtitle: 'Historical Record',
+        metaInfo: {
+            'Date': date.toLocaleString(),
+            'Template': item.template || 'Unknown'
+        },
+        tableConfig: createTableConfig(
+            ['Field', 'Value'],
+            formDataToTableRows(item.data || {})
+        ),
+        filename: `trade_form_${date.getTime()}.pdf`
+    });
 
-        // Add header
-        doc.setFillColor(102, 126, 234);
-        doc.rect(0, 0, 210, 40, 'F');
-
-        doc.setTextColor(255, 255, 255);
-        doc.setFontSize(24);
-        doc.setFont(undefined, 'bold');
-        doc.text('Trade CRM', 20, 25);
-
-        doc.setFontSize(12);
-        doc.setFont(undefined, 'normal');
-        doc.text('Historical Record', 20, 33);
-
-        // Add info
-        doc.setTextColor(100, 100, 100);
-        doc.setFontSize(10);
-        const date = new Date(item.timestamp || Date.now());
-        doc.text(`Date: ${date.toLocaleString()}`, 150, 25, { align: 'right' });
-        doc.text(`Template: ${item.template || 'Unknown'}`, 150, 31, { align: 'right' });
-
-        // Prepare table data
-        const tableData = Object.entries(item.data || {}).map(([key, value]) => [
-            formatLabel(key),
-            value || '(not filled)'
-        ]);
-
-        // Add table
-        doc.autoTable({
-            startY: 50,
-            head: [['Field', 'Value']],
-            body: tableData,
-            theme: 'striped',
-            headStyles: {
-                fillColor: [102, 126, 234],
-                fontSize: 11,
-                fontStyle: 'bold',
-                textColor: [255, 255, 255]
-            },
-            bodyStyles: {
-                fontSize: 10,
-                textColor: [50, 50, 50]
-            },
-            alternateRowStyles: {
-                fillColor: [248, 249, 253]
-            },
-            margin: { left: 20, right: 20 }
-        });
-
-        // Save
-        doc.save(`trade_form_${date.getTime()}.pdf`);
-    } catch (err) {
-        console.error('PDF export error:', err);
-        alert('Failed to export PDF: ' + err.message);
+    if (!result.success) {
+        console.error('PDF export error:', result.error);
+        alert('Failed to export PDF: ' + result.error.message);
     }
 }
 
+// Export history summary to PDF
 function exportHistoryToPDF() {
     fetch('/api/history?limit=50')
         .then(resp => resp.json())
@@ -587,74 +629,24 @@ function exportHistoryToPDF() {
                 return;
             }
 
-            const { jsPDF } = window.jspdf;
-            const doc = new jsPDF();
-
-            // Add header
-            doc.setFillColor(102, 126, 234);
-            doc.rect(0, 0, 210, 40, 'F');
-
-            doc.setTextColor(255, 255, 255);
-            doc.setFontSize(24);
-            doc.setFont(undefined, 'bold');
-            doc.text('Trade CRM', 20, 25);
-
-            doc.setFontSize(12);
-            doc.setFont(undefined, 'normal');
-            doc.text('History Report', 20, 33);
-
-            doc.setTextColor(100, 100, 100);
-            doc.setFontSize(10);
-            doc.text(`Generated: ${new Date().toLocaleString()}`, 150, 25, { align: 'right' });
-            doc.text(`Total Records: ${history.length}`, 150, 31, { align: 'right' });
-
-            // Prepare summary table
-            const tableData = history.map((item, index) => {
-                const date = new Date(item.timestamp || Date.now());
-                return [
-                    index + 1,
-                    date.toLocaleString(),
-                    item.template || 'Unknown',
-                    Object.keys(item.data || {}).length + ' fields'
-                ];
+            const result = generatePDF({
+                title: 'Trade CRM',
+                subtitle: 'History Report',
+                metaInfo: {
+                    'Generated': new Date().toLocaleString(),
+                    'Total Records': history.length
+                },
+                tableConfig: createTableConfig(
+                    ['#', 'Date', 'Template', 'Fields'],
+                    historyToSummaryRows(history)
+                ),
+                filename: `trade_crm_history_${Date.now()}.pdf`
             });
 
-            doc.autoTable({
-                startY: 50,
-                head: [['#', 'Date', 'Template', 'Fields']],
-                body: tableData,
-                theme: 'striped',
-                headStyles: {
-                    fillColor: [102, 126, 234],
-                    fontSize: 11,
-                    fontStyle: 'bold',
-                    textColor: [255, 255, 255]
-                },
-                bodyStyles: {
-                    fontSize: 9,
-                    textColor: [50, 50, 50]
-                },
-                alternateRowStyles: {
-                    fillColor: [248, 249, 253]
-                },
-                margin: { left: 20, right: 20 }
-            });
-
-            // Add footer
-            const pageCount = doc.internal.getNumberOfPages();
-            for (let i = 1; i <= pageCount; i++) {
-                doc.setPage(i);
-                doc.setFontSize(9);
-                doc.setTextColor(150, 150, 150);
-                doc.text(
-                    `Page ${i} of ${pageCount}`,
-                    doc.internal.pageSize.width / 2,
-                    doc.internal.pageSize.height - 10,
-                    { align: 'center' }
-                );
+            if (!result.success) {
+                console.error('PDF export error:', result.error);
+                alert('Failed to export PDF: ' + result.error.message);
             }
-
-            doc.save(`trade_crm_history_${Date.now()}.pdf`);
         })
         .catch(err => {
             console.error('Error:', err);
@@ -663,57 +655,118 @@ function exportHistoryToPDF() {
 }
 
 // ============================================
-// Export Functions - Excel
+// Export Functions - Excel (Functional Approach)
 // ============================================
 
+// Pure function to create workbook
+const createWorkbook = () => XLSX.utils.book_new();
+
+// Pure function to create worksheet from data
+const createWorksheet = (data, columnWidths = []) => {
+    const ws = XLSX.utils.json_to_sheet(data);
+    if (columnWidths.length > 0) {
+        ws['!cols'] = columnWidths.map(wch => ({ wch }));
+    }
+    return ws;
+};
+
+// Pure function to transform form data to Excel format
+const formDataToExcelRows = (data) =>
+    Object.entries(data).map(([key, value]) => ({
+        'Field': formatLabel(key),
+        'Value': value || '(not filled)'
+    }));
+
+// Pure function to create metadata sheet data
+const createMetadata = (template, fieldCount) => [
+    { 'Property': 'Template', 'Value': template },
+    { 'Property': 'Export Date', 'Value': new Date().toLocaleString() },
+    { 'Property': 'Total Fields', 'Value': fieldCount }
+];
+
+// Pure function to transform history to Excel format
+const historyToExcelRows = (history) =>
+    history.map((item, index) => {
+        const date = new Date(item.timestamp || Date.now());
+        const baseData = {
+            '#': index + 1,
+            'Date': date.toLocaleString(),
+            'Template': item.template || 'Unknown',
+            'Fields Count': Object.keys(item.data || {}).length
+        };
+
+        // Add all fields from the item
+        Object.entries(item.data || {}).forEach(([key, value]) => {
+            baseData[formatLabel(key)] = value || '(not filled)';
+        });
+
+        return baseData;
+    });
+
+// Pure function to create summary data
+const createSummary = (history) => {
+    const dateRange = history.length > 0
+        ? `${new Date(history[history.length - 1].timestamp).toLocaleDateString()} - ${new Date(history[0].timestamp).toLocaleDateString()}`
+        : 'N/A';
+
+    return [
+        { 'Metric': 'Total Submissions', 'Value': history.length },
+        { 'Metric': 'Export Date', 'Value': new Date().toLocaleString() },
+        { 'Metric': 'Date Range', 'Value': dateRange }
+    ];
+};
+
+// Main Excel export function
+const generateExcel = ({ sheets, filename }) => {
+    try {
+        const wb = createWorkbook();
+
+        sheets.forEach(({ name, data, columnWidths }) => {
+            const ws = createWorksheet(data, columnWidths);
+            XLSX.utils.book_append_sheet(wb, ws, name);
+        });
+
+        XLSX.writeFile(wb, filename);
+        return { success: true };
+    } catch (error) {
+        return { success: false, error };
+    }
+};
+
+// Export current form to Excel
 function exportToExcel() {
     if (!currentOutput || Object.keys(currentOutput).length === 0) {
-        alert('No data to export. Please fill a form first.');
+        showStatus('No data to export. Please fill a form first.', 'error');
         return;
     }
 
-    try {
-        // Prepare data for Excel
-        const data = Object.entries(currentOutput).map(([key, value]) => ({
-            'Field': formatLabel(key),
-            'Value': value || '(not filled)'
-        }));
+    const template = document.getElementById('template-select').value;
+    const result = generateExcel({
+        sheets: [
+            {
+                name: 'Form Data',
+                data: formDataToExcelRows(currentOutput),
+                columnWidths: [30, 50]
+            },
+            {
+                name: 'Metadata',
+                data: createMetadata(template, Object.keys(currentOutput).length),
+                columnWidths: [20, 40]
+            }
+        ],
+        filename: `trade_form_${Date.now()}.xlsx`
+    });
 
-        // Create worksheet
-        const ws = XLSX.utils.json_to_sheet(data);
-
-        // Set column widths
-        ws['!cols'] = [
-            { wch: 30 },  // Field column
-            { wch: 50 }   // Value column
-        ];
-
-        // Create workbook
-        const wb = XLSX.utils.book_new();
-        XLSX.utils.book_append_sheet(wb, ws, 'Form Data');
-
-        // Add metadata sheet
-        const metaData = [
-            { 'Property': 'Template', 'Value': document.getElementById('template-select').value },
-            { 'Property': 'Export Date', 'Value': new Date().toLocaleString() },
-            { 'Property': 'Total Fields', 'Value': Object.keys(currentOutput).length }
-        ];
-        const wsMeta = XLSX.utils.json_to_sheet(metaData);
-        wsMeta['!cols'] = [{ wch: 20 }, { wch: 40 }];
-        XLSX.utils.book_append_sheet(wb, wsMeta, 'Metadata');
-
-        // Save file
-        const filename = `trade_form_${Date.now()}.xlsx`;
-        XLSX.writeFile(wb, filename);
-
+    if (result.success) {
         showStatus('Excel file exported successfully!', 'success');
         setTimeout(() => statusEl.style.display = 'none', 2000);
-    } catch (err) {
-        console.error('Excel export error:', err);
-        showStatus('Failed to export Excel: ' + err.message, 'error');
+    } else {
+        console.error('Excel export error:', result.error);
+        showStatus('Failed to export Excel: ' + result.error.message, 'error');
     }
 }
 
+// Export history to Excel
 function exportHistoryToExcel() {
     fetch('/api/history?limit=100')
         .then(resp => resp.json())
@@ -724,43 +777,26 @@ function exportHistoryToExcel() {
                 return;
             }
 
-            // Prepare data for Excel
-            const excelData = history.map((item, index) => {
-                const date = new Date(item.timestamp || Date.now());
-                const baseData = {
-                    '#': index + 1,
-                    'Date': date.toLocaleString(),
-                    'Template': item.template || 'Unknown',
-                    'Fields Count': Object.keys(item.data || {}).length
-                };
-
-                // Add all fields from the item
-                Object.entries(item.data || {}).forEach(([key, value]) => {
-                    baseData[formatLabel(key)] = value || '(not filled)';
-                });
-
-                return baseData;
+            const result = generateExcel({
+                sheets: [
+                    {
+                        name: 'History',
+                        data: historyToExcelRows(history),
+                        columnWidths: []
+                    },
+                    {
+                        name: 'Summary',
+                        data: createSummary(history),
+                        columnWidths: [25, 40]
+                    }
+                ],
+                filename: `trade_crm_history_${Date.now()}.xlsx`
             });
 
-            // Create worksheet
-            const ws = XLSX.utils.json_to_sheet(excelData);
-
-            // Create workbook
-            const wb = XLSX.utils.book_new();
-            XLSX.utils.book_append_sheet(wb, ws, 'History');
-
-            // Add summary sheet
-            const summaryData = [
-                { 'Metric': 'Total Submissions', 'Value': history.length },
-                { 'Metric': 'Export Date', 'Value': new Date().toLocaleString() },
-                { 'Metric': 'Date Range', 'Value': history.length > 0 ? `${new Date(history[history.length - 1].timestamp).toLocaleDateString()} - ${new Date(history[0].timestamp).toLocaleDateString()}` : 'N/A' }
-            ];
-            const wsSummary = XLSX.utils.json_to_sheet(summaryData);
-            wsSummary['!cols'] = [{ wch: 25 }, { wch: 40 }];
-            XLSX.utils.book_append_sheet(wb, wsSummary, 'Summary');
-
-            // Save file
-            XLSX.writeFile(wb, `trade_crm_history_${Date.now()}.xlsx`);
+            if (!result.success) {
+                console.error('Excel export error:', result.error);
+                alert('Failed to export Excel: ' + result.error.message);
+            }
         })
         .catch(err => {
             console.error('Error:', err);
@@ -768,6 +804,5 @@ function exportHistoryToExcel() {
         });
 }
 
-function exportAllData() {
-    exportHistoryToExcel();
-}
+// Alias for exporting all data
+const exportAllData = exportHistoryToExcel;
