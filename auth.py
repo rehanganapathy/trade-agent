@@ -7,11 +7,17 @@ from functools import wraps
 from flask import request, jsonify
 from datetime import datetime, timedelta
 import jwt
+import os
 from models import User, UserRole, db
 
-# This should be in environment variables
-SECRET_KEY = "your-secret-key-change-in-production"
-JWT_EXPIRATION_HOURS = 24
+# Load configuration from environment variables
+SECRET_KEY = os.getenv('JWT_SECRET_KEY') or os.getenv('SECRET_KEY', 'dev-secret-key-change-in-production')
+JWT_EXPIRATION_HOURS = int(os.getenv('JWT_EXPIRATION_HOURS', 24))
+PASSWORD_MIN_LENGTH = int(os.getenv('PASSWORD_MIN_LENGTH', 8))
+
+# Token blacklist for logout functionality
+# In production, use Redis or similar cache
+token_blacklist = set()
 
 def generate_token(user):
     """Generate JWT token for authenticated user"""
@@ -27,12 +33,46 @@ def generate_token(user):
 def decode_token(token):
     """Decode and verify JWT token"""
     try:
+        # Check if token is blacklisted
+        if token in token_blacklist:
+            return None
+
         payload = jwt.decode(token, SECRET_KEY, algorithms=['HS256'])
         return payload
     except jwt.ExpiredSignatureError:
         return None
     except jwt.InvalidTokenError:
         return None
+
+def blacklist_token(token):
+    """Add token to blacklist (logout)"""
+    token_blacklist.add(token)
+    return True
+
+def validate_password(password):
+    """
+    Validate password meets security requirements
+    Returns (is_valid, error_message)
+    """
+    if not password:
+        return False, "Password is required"
+
+    if len(password) < PASSWORD_MIN_LENGTH:
+        return False, f"Password must be at least {PASSWORD_MIN_LENGTH} characters long"
+
+    # Check for at least one uppercase letter
+    if not any(c.isupper() for c in password):
+        return False, "Password must contain at least one uppercase letter"
+
+    # Check for at least one lowercase letter
+    if not any(c.islower() for c in password):
+        return False, "Password must contain at least one lowercase letter"
+
+    # Check for at least one digit
+    if not any(c.isdigit() for c in password):
+        return False, "Password must contain at least one number"
+
+    return True, None
 
 def get_token_from_header():
     """Extract token from Authorization header"""
