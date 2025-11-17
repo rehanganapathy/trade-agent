@@ -12,6 +12,15 @@ ENV/
 .env
 *.key
 
+# Database
+*.db
+*.sqlite
+*.sqlite3
+instance/
+
+# Uploads
+uploads/
+
 # Vector DB
 chroma_db/
 
