@@ -1134,7 +1134,7 @@ def api_fill():
         # Get autofill data if enabled
         autofill_data = {}
         if use_db and vector_db:
-            autofill_data = get_autofill_data(vector_db, prompt, template_name)
+            autofill_data = get_autofill_data(prompt, template_name, vector_db)
 
         # Fill form using AI
         filled = fill_form(template, prompt, use_openai=True, db_data=autofill_data, auto_classify_hs=auto_classify_hs)
