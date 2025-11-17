@@ -1880,13 +1880,17 @@ Example: 'Shipment of 100 units of wireless headphones from Shenzhen, China to L
                 revenueChart.destroy();
             }
 
+            // Use data from API if available, otherwise use default values
+            const labels = dashboardData?.revenue_trend?.labels || ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+            const data = dashboardData?.revenue_trend?.data || [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
+
             revenueChart = new Chart(ctx, {
                 type: 'line',
                 data: {
-                    labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
+                    labels: labels,
                     datasets: [{
                         label: 'Revenue',
-                        data: [65000, 59000, 80000, 81000, 95000, 105000, 120000, 115000, 140000, 150000, 165000, 180000],
+                        data: data,
                         borderColor: '#6366f1',
                         backgroundColor: 'rgba(99, 102, 241, 0.1)',
                         tension: 0.4,
@@ -1907,7 +1911,7 @@ Example: 'Shipment of 100 units of wireless headphones from Shenzhen, China to L
                             ticks: {
                                 color: '#94a3b8',
                                 callback: function(value) {
-                                    return '$' + (value / 1000) + 'K';
+                                    return '$' + (value / 1000).toFixed(1) + 'K';
                                 }
                             },
                             grid: {
