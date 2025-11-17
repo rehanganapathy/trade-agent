@@ -2327,12 +2327,18 @@ Example: 'Shipment of 100 units of wireless headphones from Shenzhen, China to L
                 html += '</div>';
 
                 // Add export buttons
-                html += '<div style="margin-top: 25px; display: flex; gap: 10px;">';
-                html += `<button class="btn btn-primary" onclick='downloadFormJSON(${JSON.stringify(data.filled)}, "${template}")'>`;
-                html += '<i class="fas fa-download"></i> Download JSON';
+                html += '<div style="margin-top: 25px; display: flex; gap: 10px; flex-wrap: wrap;">';
+                html += `<button class="btn btn-primary" onclick='exportFormPDF(${JSON.stringify(data.filled)}, "${template}")'>`;
+                html += '<i class="fas fa-file-pdf"></i> Export PDF';
+                html += '</button>';
+                html += `<button class="btn btn-primary" onclick='exportFormExcel(${JSON.stringify(data.filled)}, "${template}")'>`;
+                html += '<i class="fas fa-file-excel"></i> Export Excel';
+                html += '</button>';
+                html += `<button class="btn btn-secondary" onclick='downloadFormJSON(${JSON.stringify(data.filled)}, "${template}")'>`;
+                html += '<i class="fas fa-download"></i> JSON';
                 html += '</button>';
                 html += `<button class="btn btn-secondary" onclick='copyFormData(${JSON.stringify(data.filled)})'>`;
-                html += '<i class="fas fa-copy"></i> Copy to Clipboard';
+                html += '<i class="fas fa-copy"></i> Copy';
                 html += '</button>';
                 html += '</div>';
 
@@ -2367,6 +2373,84 @@ Example: 'Shipment of 100 units of wireless headphones from Shenzhen, China to L
             navigator.clipboard.writeText(JSON.stringify(data, null, 2))
                 .then(() => showToast('Copied', 'Form data copied to clipboard', 'success'))
                 .catch(() => showToast('Error', 'Failed to copy', 'error'));
+        }
+
+        async function exportFormPDF(data, template) {
+            try {
+                showToast('Exporting', 'Generating PDF...', 'info');
+
+                const response = await fetch('/api/export/pdf', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${authToken}`
+                    },
+                    body: JSON.stringify({
+                        form_data: data,
+                        template: template
+                    })
+                });
+
+                if (!response.ok) {
+                    const error = await response.json();
+                    throw new Error(error.error || 'Failed to export PDF');
+                }
+
+                // Get the blob and download it
+                const blob = await response.blob();
+                const url = window.URL.createObjectURL(blob);
+                const a = document.createElement('a');
+                a.href = url;
+                a.download = `${template.replace('.json', '')}_${Date.now()}.pdf`;
+                document.body.appendChild(a);
+                a.click();
+                window.URL.revokeObjectURL(url);
+                document.body.removeChild(a);
+
+                showToast('Success', 'PDF exported successfully!', 'success');
+            } catch (error) {
+                console.error('Error:', error);
+                showToast('Error', error.message, 'error');
+            }
+        }
+
+        async function exportFormExcel(data, template) {
+            try {
+                showToast('Exporting', 'Generating Excel file...', 'info');
+
+                const response = await fetch('/api/export/excel', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${authToken}`
+                    },
+                    body: JSON.stringify({
+                        form_data: data,
+                        template: template
+                    })
+                });
+
+                if (!response.ok) {
+                    const error = await response.json();
+                    throw new Error(error.error || 'Failed to export Excel');
+                }
+
+                // Get the blob and download it
+                const blob = await response.blob();
+                const url = window.URL.createObjectURL(blob);
+                const a = document.createElement('a');
+                a.href = url;
+                a.download = `${template.replace('.json', '')}_${Date.now()}.xlsx`;
+                document.body.appendChild(a);
+                a.click();
+                window.URL.revokeObjectURL(url);
+                document.body.removeChild(a);
+
+                showToast('Success', 'Excel file exported successfully!', 'success');
+            } catch (error) {
+                console.error('Error:', error);
+                showToast('Error', error.message, 'error');
+            }
         }
 
         // ============================================
