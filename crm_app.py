@@ -1174,7 +1174,7 @@ def api_classify_hs():
 def api_list_templates():
     """List all form templates"""
     templates = _list_form_templates()
-    return jsonify(templates)
+    return jsonify({"templates": [{"name": t} for t in templates]})
 
 
 @app.route("/api/templates/<template_name>", methods=["GET"])
