@@ -1225,6 +1225,189 @@ def api_history():
     return jsonify(history)
 
 
+@app.route("/api/export/<format>", methods=["POST"])
+@login_required
+def export_form(format):
+    """Export form data to PDF or Excel"""
+    from io import BytesIO
+
+    try:
+        data = request.json
+        form_data = data.get("form_data", {})
+        template_name = data.get("template", "form")
+
+        if not form_data:
+            return jsonify({"error": "No form data provided"}), 400
+
+        if format.lower() == "pdf":
+            # Generate PDF using reportlab
+            from reportlab.lib.pagesizes import letter, A4
+            from reportlab.lib.styles import getSampleStyleSheet, ParagraphStyle
+            from reportlab.lib.units import inch
+            from reportlab.platypus import SimpleDocTemplate, Table, TableStyle, Paragraph, Spacer
+            from reportlab.lib import colors
+            from reportlab.lib.enums import TA_LEFT, TA_CENTER
+
+            buffer = BytesIO()
+            doc = SimpleDocTemplate(buffer, pagesize=letter, topMargin=0.5*inch, bottomMargin=0.5*inch)
+            elements = []
+
+            # Styles
+            styles = getSampleStyleSheet()
+            title_style = ParagraphStyle(
+                'CustomTitle',
+                parent=styles['Heading1'],
+                fontSize=24,
+                textColor=colors.HexColor('#1e40af'),
+                spaceAfter=30,
+                alignment=TA_CENTER
+            )
+
+            # Add title
+            title = template_name.replace('_', ' ').replace('.json', '').title()
+            elements.append(Paragraph(title, title_style))
+            elements.append(Spacer(1, 20))
+
+            # Create table data
+            table_data = [['Field', 'Value']]
+            for key, value in form_data.items():
+                label = key.replace('_', ' ').title()
+                display_value = str(value) if value else '(not filled)'
+                table_data.append([label, display_value])
+
+            # Create table
+            table = Table(table_data, colWidths=[2.5*inch, 4.5*inch])
+            table.setStyle(TableStyle([
+                ('BACKGROUND', (0, 0), (-1, 0), colors.HexColor('#1e40af')),
+                ('TEXTCOLOR', (0, 0), (-1, 0), colors.whitesmoke),
+                ('ALIGN', (0, 0), (-1, -1), 'LEFT'),
+                ('FONTNAME', (0, 0), (-1, 0), 'Helvetica-Bold'),
+                ('FONTSIZE', (0, 0), (-1, 0), 12),
+                ('BOTTOMPADDING', (0, 0), (-1, 0), 12),
+                ('TOPPADDING', (0, 0), (-1, 0), 12),
+                ('BACKGROUND', (0, 1), (-1, -1), colors.white),
+                ('TEXTCOLOR', (0, 1), (-1, -1), colors.black),
+                ('FONTNAME', (0, 1), (0, -1), 'Helvetica-Bold'),
+                ('FONTNAME', (1, 1), (1, -1), 'Helvetica'),
+                ('FONTSIZE', (0, 1), (-1, -1), 10),
+                ('GRID', (0, 0), (-1, -1), 0.5, colors.grey),
+                ('ROWBACKGROUNDS', (0, 1), (-1, -1), [colors.white, colors.HexColor('#f3f4f6')]),
+                ('VALIGN', (0, 0), (-1, -1), 'TOP'),
+                ('LEFTPADDING', (0, 0), (-1, -1), 10),
+                ('RIGHTPADDING', (0, 0), (-1, -1), 10),
+                ('TOPPADDING', (0, 1), (-1, -1), 8),
+                ('BOTTOMPADDING', (0, 1), (-1, -1), 8),
+            ]))
+
+            elements.append(table)
+
+            # Add footer
+            elements.append(Spacer(1, 30))
+            footer_style = ParagraphStyle(
+                'Footer',
+                parent=styles['Normal'],
+                fontSize=8,
+                textColor=colors.grey,
+                alignment=TA_CENTER
+            )
+            footer_text = f"Generated on {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}"
+            elements.append(Paragraph(footer_text, footer_style))
+
+            # Build PDF
+            doc.build(elements)
+            buffer.seek(0)
+
+            filename = f"{template_name.replace('.json', '')}_{datetime.now().strftime('%Y%m%d_%H%M%S')}.pdf"
+            return send_file(buffer, mimetype='application/pdf', as_attachment=True, download_name=filename)
+
+        elif format.lower() == "excel":
+            # Generate Excel using openpyxl
+            from openpyxl import Workbook
+            from openpyxl.styles import Font, PatternFill, Alignment, Border, Side
+
+            buffer = BytesIO()
+            wb = Workbook()
+            ws = wb.active
+            ws.title = "Form Data"
+
+            # Set column widths
+            ws.column_dimensions['A'].width = 30
+            ws.column_dimensions['B'].width = 50
+
+            # Add title
+            title = template_name.replace('_', ' ').replace('.json', '').title()
+            ws['A1'] = title
+            ws['A1'].font = Font(size=18, bold=True, color='1e40af')
+            ws['A1'].alignment = Alignment(horizontal='center', vertical='center')
+            ws.merge_cells('A1:B1')
+            ws.row_dimensions[1].height = 30
+
+            # Add headers
+            ws['A3'] = 'Field'
+            ws['B3'] = 'Value'
+
+            header_fill = PatternFill(start_color='1e40af', end_color='1e40af', fill_type='solid')
+            header_font = Font(bold=True, color='FFFFFF', size=12)
+            header_alignment = Alignment(horizontal='left', vertical='center')
+
+            for cell in ['A3', 'B3']:
+                ws[cell].fill = header_fill
+                ws[cell].font = header_font
+                ws[cell].alignment = header_alignment
+
+            # Add data
+            row = 4
+            thin_border = Border(
+                left=Side(style='thin', color='D1D5DB'),
+                right=Side(style='thin', color='D1D5DB'),
+                top=Side(style='thin', color='D1D5DB'),
+                bottom=Side(style='thin', color='D1D5DB')
+            )
+
+            for key, value in form_data.items():
+                label = key.replace('_', ' ').title()
+                display_value = str(value) if value else '(not filled)'
+
+                ws[f'A{row}'] = label
+                ws[f'B{row}'] = display_value
+
+                # Apply styling
+                ws[f'A{row}'].font = Font(bold=True, size=10)
+                ws[f'B{row}'].font = Font(size=10)
+                ws[f'A{row}'].alignment = Alignment(horizontal='left', vertical='top', wrap_text=True)
+                ws[f'B{row}'].alignment = Alignment(horizontal='left', vertical='top', wrap_text=True)
+
+                # Alternate row colors
+                if row % 2 == 0:
+                    fill = PatternFill(start_color='F3F4F6', end_color='F3F4F6', fill_type='solid')
+                    ws[f'A{row}'].fill = fill
+                    ws[f'B{row}'].fill = fill
+
+                # Add borders
+                ws[f'A{row}'].border = thin_border
+                ws[f'B{row}'].border = thin_border
+
+                row += 1
+
+            # Add footer
+            ws[f'A{row + 1}'] = f"Generated on {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}"
+            ws[f'A{row + 1}'].font = Font(size=8, color='9CA3AF', italic=True)
+            ws.merge_cells(f'A{row + 1}:B{row + 1}')
+
+            wb.save(buffer)
+            buffer.seek(0)
+
+            filename = f"{template_name.replace('.json', '')}_{datetime.now().strftime('%Y%m%d_%H%M%S')}.xlsx"
+            return send_file(buffer, mimetype='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+                           as_attachment=True, download_name=filename)
+
+        else:
+            return jsonify({"error": "Invalid format. Use 'pdf' or 'excel'"}), 400
+
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
+
+
 # ============================================================================
 # ANALYTICS & REPORTING ROUTES
 # ============================================================================
