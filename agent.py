@@ -110,7 +110,7 @@ def _call_openai_fill(template: Dict[str, Any], prompt: str) -> Dict[str, Any]:
 
 
 
-def fill_form(template: Dict[str, Any], prompt: str, use_openai: bool = True, db_data: Optional[Dict[str, Any]] = None) -> Dict[str, Any]:
+def fill_form(template: Dict[str, Any], prompt: str, use_openai: bool = True, db_data: Optional[Dict[str, Any]] = None, auto_classify_hs: bool = False) -> Dict[str, Any]:
     """Fill the template from prompt using Groq LLM.
 
     Args:
@@ -118,6 +118,7 @@ def fill_form(template: Dict[str, Any], prompt: str, use_openai: bool = True, db
         prompt: User input text
         use_openai: Kept for backward compatibility, always uses LLM
         db_data: Optional database data for filling missing values
+        auto_classify_hs: If True, automatically classify HS codes for products
 
     Returns:
         Dict mapping field names to extracted values
@@ -136,6 +137,41 @@ def fill_form(template: Dict[str, Any], prompt: str, use_openai: bool = True, db
         for key in template.keys():
             if not result.get(key) and key in db_data:
                 result[key] = db_data[key]
+
+    # Auto-classify HS codes if requested
+    if auto_classify_hs:
+        try:
+            from llm_hs_classifier import get_classifier
+            hs_classifier = get_classifier()
+
+            # Look for product description fields
+            product_desc = None
+            for key in result.keys():
+                if 'product' in key.lower() and 'desc' in key.lower():
+                    product_desc = result.get(key)
+                    break
+                elif key.lower() in ['description', 'product_name', 'goods_description']:
+                    product_desc = result.get(key)
+                    break
+
+            # If we found a product description, classify it
+            if product_desc and product_desc.strip():
+                print(f"\n🔍 Auto-classifying HS code for: {product_desc}")
+                classification = hs_classifier.classify(product_desc, top_n=1)
+
+                if classification.get('suggestions') and len(classification['suggestions']) > 0:
+                    best_match = classification['suggestions'][0]
+                    hs_code = best_match.get('hs_code', '')
+
+                    # Find HS code field and populate it
+                    for key in result.keys():
+                        if 'hs' in key.lower() and 'code' in key.lower():
+                            result[key] = hs_code
+                            print(f"✅ Auto-filled HS code: {hs_code} (confidence: {best_match.get('confidence', 0):.2%})")
+                            break
+        except Exception as e:
+            print(f"⚠️  HS code auto-classification failed: {e}")
+            # Don't fail the entire form filling if HS classification fails
 
     return result
 
