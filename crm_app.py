@@ -1141,7 +1141,7 @@ def api_fill():
 
         # Save to vector DB if requested
         if save_to_db and vector_db:
-            vector_db.add_submission(template_name, filled)
+            vector_db.add_submission(filled, template_name)
 
         return jsonify({
             "filled": filled,
