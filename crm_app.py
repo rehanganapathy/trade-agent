@@ -24,7 +24,7 @@ from models import db, User, UserRole, Company, CompanyType, Contact, Lead, Lead
 from models import Product, Order, OrderStatus, OrderItem, Invoice, Payment, PaymentStatus, PaymentMethod
 from models import Shipment, ShipmentStatus, Document, DocumentType, Activity, ActivityType
 from models import Task, Notification, Warehouse, InventoryItem, ExchangeRate
-from auth import generate_token, login_required, role_required, can_create, can_read, can_update, can_delete
+from auth import generate_token, login_required, role_required, can_create, can_read, can_update, can_delete, validate_password, blacklist_token
 from integrations import IntegrationFactory
 
 # Import HS classifier
@@ -53,7 +53,8 @@ app = Flask(
 )
 
 # Configuration
-app.config['SECRET_KEY'] = os.getenv('SECRET_KEY', 'dev-secret-key-change-in-production')
+# Use JWT_SECRET_KEY if available, fallback to SECRET_KEY for consistency with auth.py
+app.config['SECRET_KEY'] = os.getenv('JWT_SECRET_KEY') or os.getenv('SECRET_KEY', 'dev-secret-key-change-in-production')
 app.config['SQLALCHEMY_DATABASE_URI'] = os.getenv('DATABASE_URL', 'sqlite:///trade_crm.db')
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 app.config['UPLOAD_FOLDER'] = str(UPLOAD_FOLDER)
@@ -139,6 +140,11 @@ def register():
     if not all(field in data for field in required):
         return jsonify({'error': 'Missing required fields'}), 400
 
+    # Validate password strength
+    is_valid, error_msg = validate_password(data['password'])
+    if not is_valid:
+        return jsonify({'error': error_msg}), 400
+
     # Check if user exists
     if User.query.filter_by(email=data['email']).first():
         return jsonify({'error': 'Email already registered'}), 409
@@ -207,6 +213,21 @@ def login():
 def get_current_user():
     """Get current user info"""
     return jsonify(request.current_user.to_dict())
+
+
+@app.route("/api/auth/logout", methods=["POST"])
+@login_required
+def logout():
+    """Logout user by blacklisting their token"""
+    from auth import get_token_from_header
+
+    token = get_token_from_header()
+    if token:
+        blacklist_token(token)
+
+    return jsonify({
+        'message': 'Logged out successfully'
+    }), 200
 
 
 # ============================================================================
