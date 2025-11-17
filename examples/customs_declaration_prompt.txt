@@ -1,0 +1,45 @@
+Customs Declaration - Import Entry
+
+Declaration Number: IMP-2025-789456
+Date: 2025-11-20
+Type: Import Declaration
+
+Declarant: UK Customs Broker Ltd.
+License: CB-UK-12345
+
+Importer:
+GlobalTech Importers Ltd.
+567 Business Park Road, London EC1A 1BB, UK
+VAT Number: GB123456789
+
+Origin and Transport:
+Country of Origin: China
+Country of Export: United States
+Country of Destination: United Kingdom
+Port of Entry: Felixstowe
+
+Transport Document: Bill of Lading MAEU123456789
+Mode of Transport: Sea freight
+
+Goods Description:
+Product: Premium Wireless Bluetooth Headphones with Active Noise Cancellation
+HS Code: 8518300000
+Quantity: 500 units
+Unit of Measure: pieces (PCS)
+
+Valuation:
+Customs Value: 44,995.00 USD (≈ 35,500 GBP)
+Currency: USD
+Invoice Number: CI-2025-001234
+
+Duties and Taxes:
+Duty Rate: 2.2%
+Duty Amount: 781 GBP
+VAT Rate: 20%
+VAT Amount: 7,256 GBP
+Total Taxes: 8,037 GBP
+
+Packaging:
+Number of Packages: 10 cartons
+Gross Weight: 250 kg
+Net Weight: 200 kg

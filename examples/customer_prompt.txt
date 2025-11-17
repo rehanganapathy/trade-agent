@@ -1,0 +1,15 @@
+Customer Information:
+
+Company Name: Global Trading Inc.
+Contact Person: Sarah Johnson
+Email: sarah.johnson@globaltrading.com
+Phone: +1 (555) 987-6543
+
+Billing Address: 456 Commerce Boulevard, Suite 200, New York, NY 10001
+Shipping Address: Same as billing
+
+Tax ID: 12-3456789
+Payment Terms: Net 30
+Requested Credit Limit: $50,000
+
+Thank you!

@@ -1,0 +1,34 @@
+{
+    "product_name": {
+        "label": "Product Name",
+        "type": "string"
+    },
+    "hs_code": {
+        "label": "HS Code",
+        "type": "string"
+    },
+    "description": {
+        "label": "Product Description",
+        "type": "string"
+    },
+    "quantity": {
+        "label": "Quantity",
+        "type": "string"
+    },
+    "unit_price": {
+        "label": "Unit Price",
+        "type": "string"
+    },
+    "country_of_origin": {
+        "label": "Country of Origin",
+        "type": "string"
+    },
+    "weight": {
+        "label": "Weight (kg)",
+        "type": "string"
+    },
+    "dimensions": {
+        "label": "Dimensions (L×W×H)",
+        "type": "string"
+    }
+}

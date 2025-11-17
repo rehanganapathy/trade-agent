@@ -1,0 +1,82 @@
+{
+    "certificate_number": {
+        "label": "Certificate Number",
+        "type": "string"
+    },
+    "certificate_date": {
+        "label": "Certificate Date",
+        "type": "date"
+    },
+    "exporter_name": {
+        "label": "Exporter Name",
+        "type": "string"
+    },
+    "exporter_address": {
+        "label": "Exporter Address",
+        "type": "string"
+    },
+    "consignee_name": {
+        "label": "Consignee Name",
+        "type": "string"
+    },
+    "consignee_address": {
+        "label": "Consignee Address",
+        "type": "string"
+    },
+    "country_of_origin": {
+        "label": "Country of Origin",
+        "type": "string"
+    },
+    "country_of_destination": {
+        "label": "Country of Destination",
+        "type": "string"
+    },
+    "invoice_number": {
+        "label": "Invoice Number",
+        "type": "string"
+    },
+    "invoice_date": {
+        "label": "Invoice Date",
+        "type": "date"
+    },
+    "product_description": {
+        "label": "Product Description",
+        "type": "string"
+    },
+    "hs_code": {
+        "label": "HS Code",
+        "type": "string"
+    },
+    "quantity": {
+        "label": "Quantity",
+        "type": "string"
+    },
+    "gross_weight": {
+        "label": "Gross Weight",
+        "type": "string"
+    },
+    "net_weight": {
+        "label": "Net Weight",
+        "type": "string"
+    },
+    "number_of_packages": {
+        "label": "Number of Packages",
+        "type": "string"
+    },
+    "transport_details": {
+        "label": "Transport Details",
+        "type": "string"
+    },
+    "place_of_issue": {
+        "label": "Place of Issue",
+        "type": "string"
+    },
+    "issuing_authority": {
+        "label": "Issuing Authority",
+        "type": "string"
+    },
+    "declaration_text": {
+        "label": "Declaration Text",
+        "type": "string"
+    }
+}

@@ -1,0 +1,30 @@
+{
+    "name": {
+        "label": "Full name",
+        "type": "string"
+    },
+    "email": {
+        "label": "Email",
+        "type": "email"
+    },
+    "phone": {
+        "label": "Phone number",
+        "type": "phone"
+    },
+    "address": {
+        "label": "Mailing address",
+        "type": "string"
+    },
+    "company": {
+        "label": "Company",
+        "type": "string"
+    },
+    "position": {
+        "label": "Position",
+        "type": "string"
+    },
+    "start_date": {
+        "label": "Start date",
+        "type": "string"
+    }
+}

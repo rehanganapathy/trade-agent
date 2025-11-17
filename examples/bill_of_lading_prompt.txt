@@ -1,0 +1,37 @@
+Bill of Lading Details:
+
+B/L Number: MAEU123456789
+Date: 2025-11-10
+Type: Ocean Bill of Lading
+
+Shipper:
+TechExport Solutions Inc.
+1234 Industrial Drive
+San Francisco, CA 94102, USA
+
+Consignee:
+GlobalTech Importers Ltd.
+567 Business Park Road
+London EC1A 1BB, UK
+
+Notify Party: Same as consignee
+
+Vessel: MAERSK ATLANTA
+Voyage Number: V-2025-045
+
+Ports:
+Port of Loading: Port of Oakland, California
+Port of Discharge: Port of Felixstowe, UK
+Place of Delivery: London, UK
+Place of Receipt: San Francisco, CA
+
+Cargo Details:
+10 cartons of Wireless Headphones
+Marks and Numbers: TECH-WH-2025
+Container Number: MAEU1234567
+Seal Number: SL987654
+Gross Weight: 250 kg
+Measurement: 0.72 CBM (cubic meters)
+
+Freight: Prepaid
+Number of Original B/Ls: 3

@@ -1,0 +1,122 @@
+{
+    "declaration_number": {
+        "label": "Declaration Number",
+        "type": "string"
+    },
+    "declaration_date": {
+        "label": "Declaration Date",
+        "type": "date"
+    },
+    "declaration_type": {
+        "label": "Declaration Type (Import/Export)",
+        "type": "string"
+    },
+    "declarant_name": {
+        "label": "Declarant Name",
+        "type": "string"
+    },
+    "declarant_id": {
+        "label": "Declarant ID/License",
+        "type": "string"
+    },
+    "importer_exporter_name": {
+        "label": "Importer/Exporter Name",
+        "type": "string"
+    },
+    "importer_exporter_address": {
+        "label": "Importer/Exporter Address",
+        "type": "string"
+    },
+    "importer_exporter_tax_id": {
+        "label": "Importer/Exporter Tax ID",
+        "type": "string"
+    },
+    "country_of_origin": {
+        "label": "Country of Origin",
+        "type": "string"
+    },
+    "country_of_export": {
+        "label": "Country of Export",
+        "type": "string"
+    },
+    "country_of_destination": {
+        "label": "Country of Destination",
+        "type": "string"
+    },
+    "port_of_entry_exit": {
+        "label": "Port of Entry/Exit",
+        "type": "string"
+    },
+    "mode_of_transport": {
+        "label": "Mode of Transport",
+        "type": "string"
+    },
+    "transport_document_number": {
+        "label": "Transport Document Number (B/L, AWB)",
+        "type": "string"
+    },
+    "product_description": {
+        "label": "Product Description",
+        "type": "string"
+    },
+    "hs_code": {
+        "label": "HS Code",
+        "type": "string"
+    },
+    "quantity": {
+        "label": "Quantity",
+        "type": "string"
+    },
+    "unit_of_measure": {
+        "label": "Unit of Measure",
+        "type": "string"
+    },
+    "customs_value": {
+        "label": "Customs Value",
+        "type": "string"
+    },
+    "currency": {
+        "label": "Currency",
+        "type": "string"
+    },
+    "duty_rate": {
+        "label": "Duty Rate (%)",
+        "type": "string"
+    },
+    "duty_amount": {
+        "label": "Duty Amount",
+        "type": "string"
+    },
+    "vat_rate": {
+        "label": "VAT Rate (%)",
+        "type": "string"
+    },
+    "vat_amount": {
+        "label": "VAT Amount",
+        "type": "string"
+    },
+    "total_taxes": {
+        "label": "Total Taxes and Duties",
+        "type": "string"
+    },
+    "invoice_number": {
+        "label": "Invoice Number",
+        "type": "string"
+    },
+    "invoice_date": {
+        "label": "Invoice Date",
+        "type": "date"
+    },
+    "gross_weight": {
+        "label": "Gross Weight (kg)",
+        "type": "string"
+    },
+    "net_weight": {
+        "label": "Net Weight (kg)",
+        "type": "string"
+    },
+    "number_of_packages": {
+        "label": "Number of Packages",
+        "type": "string"
+    }
+}

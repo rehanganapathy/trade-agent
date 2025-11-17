@@ -1,0 +1,98 @@
+{
+    "invoice_number": {
+        "label": "Invoice Number",
+        "type": "string"
+    },
+    "invoice_date": {
+        "label": "Invoice Date",
+        "type": "date"
+    },
+    "exporter_name": {
+        "label": "Exporter Name",
+        "type": "string"
+    },
+    "exporter_address": {
+        "label": "Exporter Address",
+        "type": "string"
+    },
+    "exporter_tax_id": {
+        "label": "Exporter Tax ID",
+        "type": "string"
+    },
+    "consignee_name": {
+        "label": "Consignee Name",
+        "type": "string"
+    },
+    "consignee_address": {
+        "label": "Consignee Address",
+        "type": "string"
+    },
+    "consignee_tax_id": {
+        "label": "Consignee Tax ID",
+        "type": "string"
+    },
+    "country_of_origin": {
+        "label": "Country of Origin",
+        "type": "string"
+    },
+    "country_of_destination": {
+        "label": "Country of Destination",
+        "type": "string"
+    },
+    "product_description": {
+        "label": "Product Description",
+        "type": "string"
+    },
+    "hs_code": {
+        "label": "HS Code",
+        "type": "string"
+    },
+    "quantity": {
+        "label": "Quantity",
+        "type": "string"
+    },
+    "unit_of_measure": {
+        "label": "Unit of Measure",
+        "type": "string"
+    },
+    "unit_price": {
+        "label": "Unit Price",
+        "type": "string"
+    },
+    "currency": {
+        "label": "Currency",
+        "type": "string"
+    },
+    "total_value": {
+        "label": "Total Value",
+        "type": "string"
+    },
+    "incoterms": {
+        "label": "Incoterms (FOB, CIF, EXW, etc.)",
+        "type": "string"
+    },
+    "shipping_terms": {
+        "label": "Shipping Terms",
+        "type": "string"
+    },
+    "payment_terms": {
+        "label": "Payment Terms",
+        "type": "string"
+    },
+    "gross_weight": {
+        "label": "Gross Weight (kg)",
+        "type": "string"
+    },
+    "net_weight": {
+        "label": "Net Weight (kg)",
+        "type": "string"
+    },
+    "packages": {
+        "label": "Number of Packages",
+        "type": "string"
+    },
+    "package_type": {
+        "label": "Package Type (Carton, Pallet, etc.)",
+        "type": "string"
+    }
+}

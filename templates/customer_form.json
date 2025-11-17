@@ -1,0 +1,38 @@
+{
+    "customer_name": {
+        "label": "Customer Name",
+        "type": "string"
+    },
+    "company_name": {
+        "label": "Company Name",
+        "type": "string"
+    },
+    "email": {
+        "label": "Email Address",
+        "type": "email"
+    },
+    "phone": {
+        "label": "Phone Number",
+        "type": "phone"
+    },
+    "billing_address": {
+        "label": "Billing Address",
+        "type": "string"
+    },
+    "shipping_address": {
+        "label": "Shipping Address",
+        "type": "string"
+    },
+    "tax_id": {
+        "label": "Tax ID",
+        "type": "string"
+    },
+    "payment_terms": {
+        "label": "Payment Terms",
+        "type": "string"
+    },
+    "credit_limit": {
+        "label": "Credit Limit",
+        "type": "string"
+    }
+}

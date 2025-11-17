@@ -1,0 +1,34 @@
+Commercial Invoice Information:
+
+Invoice Number: CI-2025-001234
+Invoice Date: 2025-11-15
+
+Exporter:
+TechExport Solutions Inc.
+1234 Industrial Drive, San Francisco, CA 94102, USA
+Tax ID: 94-1234567
+
+Consignee:
+GlobalTech Importers Ltd.
+567 Business Park Road, London EC1A 1BB, United Kingdom
+Tax ID: GB123456789
+
+Shipment Details:
+From: USA to United Kingdom
+Product: Premium Wireless Bluetooth Headphones with Active Noise Cancellation
+HS Code: 8518300000
+Quantity: 500 units
+Unit Price: $89.99 USD
+Total Value: $44,995.00 USD
+
+Incoterms: CIF London
+Payment Terms: 30 days net
+Shipping: Sea freight
+
+Packaging:
+10 cartons
+Gross Weight: 250 kg
+Net Weight: 200 kg
+Dimensions: 60×40×30 cm per carton
+
+Country of Origin: China

@@ -1,0 +1,90 @@
+{
+    "packing_list_number": {
+        "label": "Packing List Number",
+        "type": "string"
+    },
+    "date": {
+        "label": "Date",
+        "type": "date"
+    },
+    "invoice_reference": {
+        "label": "Invoice Reference",
+        "type": "string"
+    },
+    "shipper_name": {
+        "label": "Shipper Name",
+        "type": "string"
+    },
+    "shipper_address": {
+        "label": "Shipper Address",
+        "type": "string"
+    },
+    "consignee_name": {
+        "label": "Consignee Name",
+        "type": "string"
+    },
+    "consignee_address": {
+        "label": "Consignee Address",
+        "type": "string"
+    },
+    "notify_party": {
+        "label": "Notify Party",
+        "type": "string"
+    },
+    "port_of_loading": {
+        "label": "Port of Loading",
+        "type": "string"
+    },
+    "port_of_discharge": {
+        "label": "Port of Discharge",
+        "type": "string"
+    },
+    "final_destination": {
+        "label": "Final Destination",
+        "type": "string"
+    },
+    "total_packages": {
+        "label": "Total Number of Packages",
+        "type": "string"
+    },
+    "package_type": {
+        "label": "Package Type",
+        "type": "string"
+    },
+    "package_marks": {
+        "label": "Package Marks and Numbers",
+        "type": "string"
+    },
+    "product_description": {
+        "label": "Product Description",
+        "type": "string"
+    },
+    "quantity_per_package": {
+        "label": "Quantity per Package",
+        "type": "string"
+    },
+    "gross_weight": {
+        "label": "Gross Weight (kg)",
+        "type": "string"
+    },
+    "net_weight": {
+        "label": "Net Weight (kg)",
+        "type": "string"
+    },
+    "dimensions": {
+        "label": "Dimensions (L×W×H cm)",
+        "type": "string"
+    },
+    "volume": {
+        "label": "Total Volume (CBM)",
+        "type": "string"
+    },
+    "container_number": {
+        "label": "Container Number",
+        "type": "string"
+    },
+    "seal_number": {
+        "label": "Seal Number",
+        "type": "string"
+    }
+}

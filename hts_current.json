@@ -1,0 +1,494 @@
+[
+  {
+    "htsno": "8517120000",
+    "description": "Telephones for cellular networks or for other wireless networks"
+  },
+  {
+    "htsno": "8517620000",
+    "description": "Machines for the reception, conversion and transmission or regeneration of voice, images or other data, including switching and routing apparatus"
+  },
+  {
+    "htsno": "8471300000",
+    "description": "Portable automatic data processing machines, weighing not more than 10 kg, consisting of at least a central processing unit, a keyboard and a display (laptops)"
+  },
+  {
+    "htsno": "8471410000",
+    "description": "Automatic data processing machines, comprising in the same housing at least a central processing unit and input/output unit (desktop computers)"
+  },
+  {
+    "htsno": "8528520000",
+    "description": "Monitors, projectors and reception apparatus for television, color, with LCD display"
+  },
+  {
+    "htsno": "8518300000",
+    "description": "Headphones and earphones, whether or not combined with a microphone, and sets consisting of a microphone and one or more loudspeakers"
+  },
+  {
+    "htsno": "8518210000",
+    "description": "Single loudspeakers, mounted in their enclosures"
+  },
+  {
+    "htsno": "8518220000",
+    "description": "Multiple loudspeakers, mounted in the same enclosure"
+  },
+  {
+    "htsno": "8523490000",
+    "description": "Optical media for recording sound or other phenomena (CDs, DVDs, Blu-ray)"
+  },
+  {
+    "htsno": "8523510000",
+    "description": "Solid-state non-volatile storage devices (flash drives, SSDs, memory cards)"
+  },
+  {
+    "htsno": "8504401000",
+    "description": "Static converters, power supplies for automatic data processing machines"
+  },
+  {
+    "htsno": "8504409000",
+    "description": "Static converters, other power supplies and chargers"
+  },
+  {
+    "htsno": "8507600000",
+    "description": "Lithium-ion batteries and accumulators"
+  },
+  {
+    "htsno": "8507500000",
+    "description": "Nickel-metal hydride batteries"
+  },
+  {
+    "htsno": "8525800000",
+    "description": "Television cameras, digital cameras and video camera recorders"
+  },
+  {
+    "htsno": "9006400000",
+    "description": "Instant print cameras, photographic cameras"
+  },
+  {
+    "htsno": "6109100004",
+    "description": "T-shirts, singlets, tank tops and similar garments, knitted or crocheted, of cotton"
+  },
+  {
+    "htsno": "6203420010",
+    "description": "Men's or boys' trousers and breeches, of cotton"
+  },
+  {
+    "htsno": "6204620000",
+    "description": "Women's or girls' trousers and breeches, of cotton"
+  },
+  {
+    "htsno": "6110200000",
+    "description": "Sweaters, pullovers, sweatshirts, waistcoats (vests) and similar articles, knitted or crocheted, of cotton"
+  },
+  {
+    "htsno": "6402990000",
+    "description": "Footwear with outer soles and uppers of rubber or plastics (athletic footwear, sneakers)"
+  },
+  {
+    "htsno": "6403990000",
+    "description": "Footwear with outer soles of rubber, plastics or composition leather and uppers of leather"
+  },
+  {
+    "htsno": "6404200000",
+    "description": "Footwear with outer soles of leather or composition leather"
+  },
+  {
+    "htsno": "4202920000",
+    "description": "Travel bags, insulated food or beverage bags, toiletry bags, knapsacks and backpacks with outer surface of textile materials"
+  },
+  {
+    "htsno": "4202120000",
+    "description": "Trunks, suitcases, vanity cases and similar containers with outer surface of plastics or of textile materials"
+  },
+  {
+    "htsno": "4202310000",
+    "description": "Wallets, purses, key cases and similar articles of leather"
+  },
+  {
+    "htsno": "9018110000",
+    "description": "Electrocardiographs (ECG machines)"
+  },
+  {
+    "htsno": "9018120000",
+    "description": "Ultrasonic scanning apparatus for medical, surgical, dental or veterinary use"
+  },
+  {
+    "htsno": "9018310000",
+    "description": "Syringes, with or without needles, for medical use"
+  },
+  {
+    "htsno": "9018320000",
+    "description": "Tubular metal needles and needles for sutures"
+  },
+  {
+    "htsno": "3004900000",
+    "description": "Medicaments consisting of mixed or unmixed products for therapeutic or prophylactic uses, put up in measured doses or in forms or packings for retail sale"
+  },
+  {
+    "htsno": "3006300000",
+    "description": "Opacifying preparations for X-ray examinations; diagnostic reagents designed to be administered to the patient"
+  },
+  {
+    "htsno": "9021100000",
+    "description": "Orthopedic or fracture appliances"
+  },
+  {
+    "htsno": "9021210000",
+    "description": "Artificial teeth and dental fittings"
+  },
+  {
+    "htsno": "9021310000",
+    "description": "Artificial joints"
+  },
+  {
+    "htsno": "9021390000",
+    "description": "Other artificial parts of the body (prosthetics)"
+  },
+  {
+    "htsno": "8703230000",
+    "description": "Motor cars and other motor vehicles principally designed for the transport of persons, with spark-ignition internal combustion piston engine of a cylinder capacity exceeding 1500 cc but not exceeding 3000 cc"
+  },
+  {
+    "htsno": "8703240000",
+    "description": "Motor cars and other motor vehicles principally designed for the transport of persons, with spark-ignition internal combustion piston engine of a cylinder capacity exceeding 3000 cc"
+  },
+  {
+    "htsno": "8703900000",
+    "description": "Motor cars and other motor vehicles principally designed for the transport of persons, other (including electric vehicles)"
+  },
+  {
+    "htsno": "8708290000",
+    "description": "Parts and accessories of motor vehicles, other parts and accessories of bodies"
+  },
+  {
+    "htsno": "8708939000",
+    "description": "Clutches and parts thereof, for motor vehicles"
+  },
+  {
+    "htsno": "8708999000",
+    "description": "Other parts and accessories of motor vehicles"
+  },
+  {
+    "htsno": "8711200000",
+    "description": "Motorcycles with reciprocating internal combustion piston engine of a cylinder capacity exceeding 50 cc but not exceeding 250 cc"
+  },
+  {
+    "htsno": "8711300000",
+    "description": "Motorcycles with reciprocating internal combustion piston engine of a cylinder capacity exceeding 250 cc but not exceeding 500 cc"
+  },
+  {
+    "htsno": "8711400000",
+    "description": "Motorcycles with reciprocating internal combustion piston engine of a cylinder capacity exceeding 500 cc but not exceeding 800 cc"
+  },
+  {
+    "htsno": "8711500000",
+    "description": "Motorcycles with reciprocating internal combustion piston engine of a cylinder capacity exceeding 800 cc"
+  },
+  {
+    "htsno": "7326909000",
+    "description": "Other articles of iron or steel"
+  },
+  {
+    "htsno": "8302410000",
+    "description": "Mountings, fittings and similar articles suitable for buildings, of base metal"
+  },
+  {
+    "htsno": "8301100000",
+    "description": "Padlocks of base metal"
+  },
+  {
+    "htsno": "8301400000",
+    "description": "Other locks of base metal"
+  },
+  {
+    "htsno": "8205510000",
+    "description": "Household tools, handtools of a kind used in agriculture, horticulture or forestry"
+  },
+  {
+    "htsno": "8205590000",
+    "description": "Other handtools"
+  },
+  {
+    "htsno": "8207130000",
+    "description": "Rock drilling or earth boring tools, with working part of cermets"
+  },
+  {
+    "htsno": "8207190000",
+    "description": "Other rock drilling or earth boring tools"
+  },
+  {
+    "htsno": "9403200000",
+    "description": "Other metal furniture (office furniture, filing cabinets)"
+  },
+  {
+    "htsno": "9403300000",
+    "description": "Wooden furniture of a kind used in offices"
+  },
+  {
+    "htsno": "9403400000",
+    "description": "Wooden furniture of a kind used in the kitchen"
+  },
+  {
+    "htsno": "9403600000",
+    "description": "Other wooden furniture"
+  },
+  {
+    "htsno": "9404210000",
+    "description": "Mattresses of cellular rubber or plastics, whether or not covered"
+  },
+  {
+    "htsno": "9404290000",
+    "description": "Mattresses of other materials"
+  },
+  {
+    "htsno": "9404300000",
+    "description": "Sleeping bags"
+  },
+  {
+    "htsno": "9404900000",
+    "description": "Quilts, bedspreads, eiderdowns and duvets, cushions, pouffes and pillows"
+  },
+  {
+    "htsno": "8516310000",
+    "description": "Hair dryers"
+  },
+  {
+    "htsno": "8516320000",
+    "description": "Other hair-dressing or hand-drying apparatus (hair straighteners, curling irons)"
+  },
+  {
+    "htsno": "8516600000",
+    "description": "Electric ovens; cookers, cooking plates, boiling rings, grillers and roasters"
+  },
+  {
+    "htsno": "8516710000",
+    "description": "Coffee or tea makers, for domestic use"
+  },
+  {
+    "htsno": "8516720000",
+    "description": "Toasters, for domestic use"
+  },
+  {
+    "htsno": "8509800000",
+    "description": "Other electromechanical domestic appliances with self-contained electric motor (blenders, food processors)"
+  },
+  {
+    "htsno": "8508110000",
+    "description": "Vacuum cleaners, with self-contained electric motor, of a power not exceeding 1500 W and having a dust bag or other receptacle capacity not exceeding 20 l"
+  },
+  {
+    "htsno": "8508190000",
+    "description": "Other vacuum cleaners with self-contained electric motor"
+  },
+  {
+    "htsno": "8450110000",
+    "description": "Fully-automatic washing machines, each of a dry linen capacity not exceeding 10 kg"
+  },
+  {
+    "htsno": "8450120000",
+    "description": "Other washing machines, with built-in centrifugal drier"
+  },
+  {
+    "htsno": "8418210000",
+    "description": "Refrigerators, household type, compression-type"
+  },
+  {
+    "htsno": "8418300000",
+    "description": "Freezers of the chest type, not exceeding 800 l capacity"
+  },
+  {
+    "htsno": "8418400000",
+    "description": "Freezers of the upright type, not exceeding 900 l capacity"
+  },
+  {
+    "htsno": "8418500000",
+    "description": "Other furniture (chests, cabinets, display counters, showcases and the like) for storage and display, incorporating refrigerating or freezing equipment"
+  },
+  {
+    "htsno": "9503000000",
+    "description": "Tricycles, scooters, pedal cars and similar wheeled toys; dolls' carriages; dolls; other toys"
+  },
+  {
+    "htsno": "9504300000",
+    "description": "Other games, operated by coins, banknotes, bank cards, tokens or by any other means of payment (arcade games)"
+  },
+  {
+    "htsno": "9504500000",
+    "description": "Video game consoles and machines, other than those of subheading 9504.30"
+  },
+  {
+    "htsno": "9506290000",
+    "description": "Water skis, surf boards, sailboards and other water-sport equipment"
+  },
+  {
+    "htsno": "9506400000",
+    "description": "Articles and equipment for table-tennis"
+  },
+  {
+    "htsno": "9506610000",
+    "description": "Lawn-tennis balls"
+  },
+  {
+    "htsno": "9506620000",
+    "description": "Inflatable balls (soccer balls, basketballs)"
+  },
+  {
+    "htsno": "9506690000",
+    "description": "Other balls (golf balls, baseballs)"
+  },
+  {
+    "htsno": "9506910000",
+    "description": "Articles and equipment for general physical exercise, gymnastics or athletics"
+  },
+  {
+    "htsno": "6401920000",
+    "description": "Waterproof footwear covering the ankle but not covering the knee (rain boots)"
+  },
+  {
+    "htsno": "3926909000",
+    "description": "Other articles of plastics and articles of other materials of headings 3901 to 3914"
+  },
+  {
+    "htsno": "3923300000",
+    "description": "Carboys, bottles, flasks and similar articles of plastics"
+  },
+  {
+    "htsno": "3924100000",
+    "description": "Tableware and kitchenware, of plastics"
+  },
+  {
+    "htsno": "3920100000",
+    "description": "Plates, sheets, film, foil and strip, of polymers of ethylene, non-cellular and not reinforced"
+  },
+  {
+    "htsno": "6913100000",
+    "description": "Statuettes and other ornamental ceramic articles of porcelain or china"
+  },
+  {
+    "htsno": "6911100000",
+    "description": "Tableware and kitchenware, of porcelain or china"
+  },
+  {
+    "htsno": "6912000000",
+    "description": "Ceramic tableware, kitchenware, other household articles and toilet articles, other than of porcelain or china"
+  },
+  {
+    "htsno": "7013280000",
+    "description": "Drinking glasses other than of glass-ceramics, of lead crystal"
+  },
+  {
+    "htsno": "7013370000",
+    "description": "Drinking glasses other than of glass-ceramics, other"
+  },
+  {
+    "htsno": "7013490000",
+    "description": "Glassware of a kind used for table, kitchen, toilet, office, indoor decoration or similar purposes, other"
+  },
+  {
+    "htsno": "6302210000",
+    "description": "Bed linen, printed, of cotton"
+  },
+  {
+    "htsno": "6302310000",
+    "description": "Bed linen of cotton, other"
+  },
+  {
+    "htsno": "6302600000",
+    "description": "Toilet linen and kitchen linen, of terry toweling or similar terry fabrics, of cotton"
+  },
+  {
+    "htsno": "6303920000",
+    "description": "Curtains, including drapes, and interior blinds; curtain or bed valances, of synthetic fibers, other"
+  },
+  {
+    "htsno": "6304920000",
+    "description": "Other furnishing articles, not knitted or crocheted, of cotton"
+  },
+  {
+    "htsno": "2202100000",
+    "description": "Waters, including mineral waters and aerated waters, containing added sugar or other sweetening matter or flavored"
+  },
+  {
+    "htsno": "2202990000",
+    "description": "Other non-alcoholic beverages (energy drinks, sports drinks)"
+  },
+  {
+    "htsno": "2203000000",
+    "description": "Beer made from malt"
+  },
+  {
+    "htsno": "2204210000",
+    "description": "Wine of fresh grapes, including fortified wines, in containers holding 2 liters or less"
+  },
+  {
+    "htsno": "2208300000",
+    "description": "Whiskies"
+  },
+  {
+    "htsno": "2208600000",
+    "description": "Vodka"
+  },
+  {
+    "htsno": "0901210000",
+    "description": "Coffee, roasted, not decaffeinated"
+  },
+  {
+    "htsno": "0902300000",
+    "description": "Black tea (fermented) and partly fermented tea, in immediate packings of a content not exceeding 3 kg"
+  },
+  {
+    "htsno": "1701140000",
+    "description": "Other cane sugar"
+  },
+  {
+    "htsno": "1806320000",
+    "description": "Chocolate and other food preparations containing cocoa, not filled, in blocks, slabs or bars"
+  },
+  {
+    "htsno": "1806900000",
+    "description": "Other chocolate and other food preparations containing cocoa"
+  },
+  {
+    "htsno": "1905310000",
+    "description": "Sweet biscuits (cookies)"
+  },
+  {
+    "htsno": "1905320000",
+    "description": "Waffles and wafers"
+  },
+  {
+    "htsno": "1905900000",
+    "description": "Other bread, pastry, cakes, biscuits and other bakers' wares"
+  },
+  {
+    "htsno": "2009110000",
+    "description": "Orange juice, frozen"
+  },
+  {
+    "htsno": "2009120000",
+    "description": "Orange juice, not frozen, of a Brix value not exceeding 20"
+  },
+  {
+    "htsno": "2009890000",
+    "description": "Juice of any other single fruit or vegetable"
+  },
+  {
+    "htsno": "0406100000",
+    "description": "Fresh (unripened or uncured) cheese, including whey cheese, and curd"
+  },
+  {
+    "htsno": "0406300000",
+    "description": "Processed cheese, not grated or powdered"
+  },
+  {
+    "htsno": "0406900000",
+    "description": "Other cheese"
+  },
+  {
+    "htsno": "0401200000",
+    "description": "Milk and cream, not concentrated nor containing added sugar, of a fat content exceeding 1% but not exceeding 6%"
+  },
+  {
+    "htsno": "0402210000",
+    "description": "Milk and cream, concentrated or containing added sugar, in powder, granules or other solid forms, of a fat content not exceeding 1.5%"
+  }
+]

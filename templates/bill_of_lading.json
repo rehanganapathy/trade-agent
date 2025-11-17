@@ -1,0 +1,98 @@
+{
+    "bl_number": {
+        "label": "Bill of Lading Number",
+        "type": "string"
+    },
+    "bl_date": {
+        "label": "B/L Date",
+        "type": "date"
+    },
+    "bl_type": {
+        "label": "B/L Type (Master/House/Sea/Air)",
+        "type": "string"
+    },
+    "shipper_name": {
+        "label": "Shipper Name",
+        "type": "string"
+    },
+    "shipper_address": {
+        "label": "Shipper Address",
+        "type": "string"
+    },
+    "consignee_name": {
+        "label": "Consignee Name",
+        "type": "string"
+    },
+    "consignee_address": {
+        "label": "Consignee Address",
+        "type": "string"
+    },
+    "notify_party": {
+        "label": "Notify Party",
+        "type": "string"
+    },
+    "vessel_name": {
+        "label": "Vessel Name",
+        "type": "string"
+    },
+    "voyage_number": {
+        "label": "Voyage Number",
+        "type": "string"
+    },
+    "port_of_loading": {
+        "label": "Port of Loading",
+        "type": "string"
+    },
+    "port_of_discharge": {
+        "label": "Port of Discharge",
+        "type": "string"
+    },
+    "place_of_delivery": {
+        "label": "Place of Delivery",
+        "type": "string"
+    },
+    "place_of_receipt": {
+        "label": "Place of Receipt",
+        "type": "string"
+    },
+    "marks_and_numbers": {
+        "label": "Marks and Numbers",
+        "type": "string"
+    },
+    "number_of_packages": {
+        "label": "Number of Packages",
+        "type": "string"
+    },
+    "description_of_goods": {
+        "label": "Description of Goods",
+        "type": "string"
+    },
+    "gross_weight": {
+        "label": "Gross Weight",
+        "type": "string"
+    },
+    "measurement": {
+        "label": "Measurement (CBM)",
+        "type": "string"
+    },
+    "container_numbers": {
+        "label": "Container Numbers",
+        "type": "string"
+    },
+    "seal_numbers": {
+        "label": "Seal Numbers",
+        "type": "string"
+    },
+    "freight_charges": {
+        "label": "Freight Charges",
+        "type": "string"
+    },
+    "freight_payable_at": {
+        "label": "Freight Payable At",
+        "type": "string"
+    },
+    "number_of_originals": {
+        "label": "Number of Original B/Ls",
+        "type": "string"
+    }
+}

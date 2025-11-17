@@ -1,0 +1,11 @@
+{
+  "customer_name": "Customer Information",
+  "company_name": "Global Trading Inc.",
+  "email": "sarah.johnson@globaltrading.com",
+  "phone": "+1 (555) 987-6543",
+  "billing_address": "456 Commerce Boulevard, Suite 200, New York, NY 10001",
+  "shipping_address": "Same as billing",
+  "tax_id": "12-3456789",
+  "payment_terms": "Net 30",
+  "credit_limit": ""
+}
