@@ -42,9 +42,9 @@
             --sidebar-width: 260px;
             --topbar-height: 70px;
 
-            --gradient-primary: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            --gradient-secondary: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
-            --gradient-success: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+            --solid-primary: #667eea;
+            --solid-secondary: #f093fb;
+            --solid-success: #4facfe;
         }
 
         * {
@@ -73,7 +73,7 @@
             display: flex;
             align-items: center;
             justify-content: center;
-            background: var(--gradient-primary);
+            background: var(--solid-primary);
             position: relative;
             overflow: hidden;
         }
@@ -83,9 +83,7 @@
             position: absolute;
             width: 200%;
             height: 200%;
-            background: radial-gradient(circle, rgba(255,255,255,0.1) 1px, transparent 1px);
-            background-size: 50px 50px;
-            animation: moveBackground 20s linear infinite;
+            background: transparent;
         }
 
         @keyframes moveBackground {
@@ -134,7 +132,7 @@
 
         .login-logo {
             font-size: 48px;
-            background: var(--gradient-primary);
+            background: var(--solid-primary);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             margin-bottom: 10px;
@@ -195,7 +193,7 @@
         }
 
         .btn-primary {
-            background: var(--gradient-primary);
+            background: var(--solid-primary);
             color: white;
             width: 100%;
         }
@@ -269,7 +267,7 @@
 
         .sidebar-logo i {
             font-size: 32px;
-            background: var(--gradient-primary);
+            background: var(--solid-primary);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
         }
@@ -458,7 +456,7 @@
             width: 40px;
             height: 40px;
             border-radius: 10px;
-            background: var(--gradient-primary);
+            background: var(--solid-primary);
             display: flex;
             align-items: center;
             justify-content: center;
@@ -511,15 +509,15 @@
             left: 0;
             right: 0;
             height: 4px;
-            background: var(--gradient-primary);
+            background: var(--solid-primary);
         }
 
         .kpi-card.success::before {
-            background: var(--gradient-success);
+            background: var(--solid-success);
         }
 
         .kpi-card.warning::before {
-            background: var(--gradient-secondary);
+            background: var(--solid-secondary);
         }
 
         .kpi-header {
@@ -911,18 +909,17 @@
 
         /* Loading Skeleton */
         .skeleton {
-            background: linear-gradient(90deg, var(--bg-tertiary) 25%, var(--bg-secondary) 50%, var(--bg-tertiary) 75%);
-            background-size: 200% 100%;
+            background: var(--bg-tertiary);
             animation: skeleton 1.5s ease-in-out infinite;
             border-radius: 8px;
         }
 
         @keyframes skeleton {
-            0% {
-                background-position: 200% 0;
+            0%, 100% {
+                opacity: 0.5;
             }
-            100% {
-                background-position: -200% 0;
+            50% {
+                opacity: 1;
             }
         }
 
