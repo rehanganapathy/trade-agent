@@ -81,27 +81,11 @@ body {
     width: 100%;
     height: 100%;
     z-index: -2;
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-    opacity: 0.03;
+    background: var(--bg-primary);
 }
 
 .bg-mesh {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    z-index: -1;
-    background-image:
-        radial-gradient(circle at 20% 50%, rgba(102, 126, 234, 0.05) 0%, transparent 50%),
-        radial-gradient(circle at 80% 80%, rgba(118, 75, 162, 0.05) 0%, transparent 50%),
-        radial-gradient(circle at 40% 90%, rgba(240, 147, 251, 0.03) 0%, transparent 50%);
-    animation: meshMove 20s ease-in-out infinite;
-}
-
-@keyframes meshMove {
-    0%, 100% { transform: translateY(0); }
-    50% { transform: translateY(-20px); }
+    display: none;
 }
 
 /* ============================================
@@ -146,21 +130,13 @@ body {
 }
 
 .logo-icon {
-    animation: float 3s ease-in-out infinite;
-}
-
-@keyframes float {
-    0%, 100% { transform: translateY(0px); }
-    50% { transform: translateY(-5px); }
+    /* Removed floating animation for cleaner look */
 }
 
 .logo-title {
     font-size: 1.5rem;
     font-weight: 700;
-    background: linear-gradient(135deg, var(--primary) 0%, var(--primary-light) 100%);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    background-clip: text;
+    color: var(--primary);
     margin: 0;
 }
 
@@ -175,7 +151,8 @@ body {
     align-items: center;
     gap: 0.5rem;
     padding: 0.5rem 1rem;
-    background: linear-gradient(135deg, rgba(102, 126, 234, 0.1) 0%, rgba(118, 75, 162, 0.1) 100%);
+    background: rgba(102, 126, 234, 0.1);
+    border: 1px solid rgba(102, 126, 234, 0.2);
     border-radius: var(--radius-xl);
     font-size: 0.875rem;
     font-weight: 600;
@@ -273,10 +250,10 @@ body {
 .tab-indicator {
     position: absolute;
     height: calc(100% - 1rem);
-    background: linear-gradient(135deg, var(--primary) 0%, var(--primary-light) 100%);
+    background: var(--primary);
     border-radius: var(--radius-lg);
     transition: all var(--transition-slow);
-    box-shadow: var(--shadow-glow);
+    box-shadow: var(--shadow-md);
     z-index: 1;
 }
 
@@ -319,27 +296,15 @@ body {
 .card {
     background: var(--bg-secondary);
     border-radius: var(--radius-2xl);
-    box-shadow: var(--shadow-lg);
+    box-shadow: var(--shadow-md);
     padding: 2rem;
     border: 1px solid rgba(102, 126, 234, 0.1);
     transition: all var(--transition-base);
-    animation: scaleIn 0.4s var(--transition-bounce);
-}
-
-@keyframes scaleIn {
-    from {
-        opacity: 0;
-        transform: scale(0.95);
-    }
-    to {
-        opacity: 1;
-        transform: scale(1);
-    }
 }
 
 .card:hover {
-    box-shadow: var(--shadow-xl);
-    border-color: rgba(102, 126, 234, 0.2);
+    box-shadow: var(--shadow-lg);
+    border-color: rgba(102, 126, 234, 0.15);
 }
 
 .card-header {
@@ -502,7 +467,7 @@ body {
 }
 
 .toggle-input:checked + .toggle-slider {
-    background: linear-gradient(135deg, var(--primary) 0%, var(--primary-light) 100%);
+    background: var(--primary);
 }
 
 .toggle-input:checked + .toggle-slider::before {
@@ -529,7 +494,7 @@ body {
     align-items: center;
     gap: 0.5rem;
     padding: 0.75rem 1rem;
-    background: linear-gradient(135deg, rgba(102, 126, 234, 0.1) 0%, rgba(118, 75, 162, 0.1) 100%);
+    background: rgba(102, 126, 234, 0.1);
     border: 1px solid rgba(102, 126, 234, 0.2);
     border-radius: var(--radius-lg);
     font-size: 0.875rem;
@@ -542,12 +507,7 @@ body {
     display: flex;
     align-items: center;
     justify-content: center;
-    animation: sparkle 2s ease-in-out infinite;
-}
-
-@keyframes sparkle {
-    0%, 100% { opacity: 1; transform: scale(1); }
-    50% { opacity: 0.7; transform: scale(1.1); }
+    /* Removed sparkle animation for cleaner look */
 }
 
 /* ============================================
@@ -572,30 +532,15 @@ body {
 }
 
 .btn-primary {
-    background: linear-gradient(135deg, var(--primary) 0%, var(--primary-light) 100%);
+    background: var(--primary);
     color: white;
     box-shadow: var(--shadow-md);
 }
 
-.btn-primary::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background: linear-gradient(135deg, var(--primary-light) 0%, var(--accent) 100%);
-    opacity: 0;
-    transition: opacity var(--transition-base);
-}
-
 .btn-primary:hover {
-    transform: translateY(-2px);
-    box-shadow: var(--shadow-xl), var(--shadow-glow);
-}
-
-.btn-primary:hover::before {
-    opacity: 1;
+    transform: translateY(-1px);
+    box-shadow: var(--shadow-lg);
+    background: var(--primary-dark);
 }
 
 .btn-primary:active {
@@ -1038,14 +983,8 @@ body {
 }
 
 .loading {
-    background: linear-gradient(
-        90deg,
-        var(--bg-primary) 0%,
-        rgba(102, 126, 234, 0.1) 50%,
-        var(--bg-primary) 100%
-    );
-    background-size: 1000px 100%;
-    animation: shimmer 2s infinite;
+    background: rgba(102, 126, 234, 0.1);
+    animation: pulse 2s ease-in-out infinite;
 }
 
 @keyframes spin {
@@ -1074,12 +1013,11 @@ body {
     border-left: 4px solid var(--primary);
     box-shadow: var(--shadow-md);
     transition: all var(--transition-base);
-    animation: scaleIn 0.4s var(--transition-bounce);
 }
 
 .stat-card:hover {
-    transform: translateY(-4px);
-    box-shadow: var(--shadow-xl);
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-lg);
 }
 
 .stat-card-primary {
@@ -1111,23 +1049,27 @@ body {
     display: flex;
     align-items: center;
     justify-content: center;
-    background: linear-gradient(135deg, rgba(102, 126, 234, 0.1) 0%, rgba(118, 75, 162, 0.1) 100%);
+    background: rgba(102, 126, 234, 0.1);
+    border: 1px solid rgba(102, 126, 234, 0.2);
     border-radius: var(--radius-lg);
     color: var(--primary);
 }
 
 .stat-card-success .stat-icon {
     background: rgba(72, 187, 120, 0.1);
+    border-color: rgba(72, 187, 120, 0.2);
     color: var(--success);
 }
 
 .stat-card-info .stat-icon {
     background: rgba(66, 153, 225, 0.1);
+    border-color: rgba(66, 153, 225, 0.2);
     color: var(--info);
 }
 
 .stat-card-warning .stat-icon {
     background: rgba(237, 137, 54, 0.1);
+    border-color: rgba(237, 137, 54, 0.2);
     color: var(--warning);
 }
 
@@ -1195,7 +1137,7 @@ body {
 }
 
 .crm-table thead {
-    background: linear-gradient(135deg, rgba(102, 126, 234, 0.1) 0%, rgba(118, 75, 162, 0.05) 100%);
+    background: rgba(102, 126, 234, 0.08);
 }
 
 .crm-table th {
@@ -1330,11 +1272,11 @@ body {
 }
 
 .quick-action-btn:hover {
-    background: linear-gradient(135deg, var(--primary) 0%, var(--primary-light) 100%);
+    background: var(--primary);
     color: white;
     border-color: transparent;
-    transform: translateY(-4px);
-    box-shadow: var(--shadow-xl), var(--shadow-glow);
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-lg);
 }
 
 .quick-action-btn svg {
@@ -1362,25 +1304,27 @@ body {
 }
 
 .btn-export-pdf {
-    background: linear-gradient(135deg, #dc2626 0%, #b91c1c 100%);
+    background: #dc2626;
     color: white;
     box-shadow: var(--shadow-md);
 }
 
 .btn-export-pdf:hover {
-    transform: translateY(-2px);
-    box-shadow: var(--shadow-xl), 0 0 20px rgba(220, 38, 38, 0.3);
+    transform: translateY(-1px);
+    box-shadow: var(--shadow-lg);
+    background: #b91c1c;
 }
 
 .btn-export-excel {
-    background: linear-gradient(135deg, #059669 0%, #047857 100%);
+    background: #059669;
     color: white;
     box-shadow: var(--shadow-md);
 }
 
 .btn-export-excel:hover {
-    transform: translateY(-2px);
-    box-shadow: var(--shadow-xl), 0 0 20px rgba(5, 150, 105, 0.3);
+    transform: translateY(-1px);
+    box-shadow: var(--shadow-lg);
+    background: #047857;
 }
 
 .btn-export-pdf-sm,
@@ -1399,23 +1343,25 @@ body {
 }
 
 .btn-export-pdf-sm {
-    background: linear-gradient(135deg, #dc2626 0%, #b91c1c 100%);
+    background: #dc2626;
     color: white;
 }
 
 .btn-export-pdf-sm:hover {
     transform: translateY(-1px);
     box-shadow: var(--shadow-md);
+    background: #b91c1c;
 }
 
 .btn-export-excel-sm {
-    background: linear-gradient(135deg, #059669 0%, #047857 100%);
+    background: #059669;
     color: white;
 }
 
 .btn-export-excel-sm:hover {
     transform: translateY(-1px);
     box-shadow: var(--shadow-md);
+    background: #047857;
 }
 
 /* Responsive Dashboard */
