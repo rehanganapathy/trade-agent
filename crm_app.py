@@ -1110,63 +1110,81 @@ def calculate_duty():
 @login_required
 def api_fill():
     """Fill form using AI (original functionality)"""
-    data = request.get_json(force=True)
-    template_name = data.get("template")
-    prompt = data.get("prompt", "")
-    use_db = bool(data.get("use_db", True))
-    save_to_db = bool(data.get("save_to_db", False))
-    auto_classify_hs = bool(data.get("auto_classify_hs", True))
+    try:
+        data = request.get_json(force=True)
+        template_name = data.get("template")
+        prompt = data.get("prompt", "")
+        use_db = bool(data.get("use_db", True))
+        save_to_db = bool(data.get("save_to_db", False))
+        auto_classify_hs = bool(data.get("auto_classify_hs", True))
 
-    if not template_name:
-        return jsonify({"error": "template is required"}), 400
+        if not template_name:
+            return jsonify({"error": "template is required"}), 400
 
-    template_path = TEMPLATE_ROOT / template_name
-    if not template_path.exists():
-        return jsonify({"error": f"template {template_name} not found"}), 404
+        if not prompt or not prompt.strip():
+            return jsonify({"error": "prompt is required"}), 400
 
-    with template_path.open() as f:
-        template = json.load(f)
+        template_path = TEMPLATE_ROOT / template_name
+        if not template_path.exists():
+            return jsonify({"error": f"template {template_name} not found"}), 404
 
-    # Get autofill data if enabled
-    autofill_data = {}
-    if use_db and vector_db:
-        autofill_data = get_autofill_data(vector_db, prompt, template_name)
+        with template_path.open() as f:
+            template = json.load(f)
 
-    # Fill form using AI
-    filled = fill_form(template, prompt, use_openai=True, db_data=autofill_data, auto_classify_hs=auto_classify_hs)
+        # Get autofill data if enabled
+        autofill_data = {}
+        if use_db and vector_db:
+            autofill_data = get_autofill_data(vector_db, prompt, template_name)
 
-    # Save to vector DB if requested
-    if save_to_db and vector_db:
-        vector_db.add_submission(template_name, filled)
+        # Fill form using AI
+        filled = fill_form(template, prompt, use_openai=True, db_data=autofill_data, auto_classify_hs=auto_classify_hs)
 
-    return jsonify({
-        "filled": filled,
-        "from_db": bool(autofill_data),
-        "template": template_name
-    })
+        # Save to vector DB if requested
+        if save_to_db and vector_db:
+            vector_db.add_submission(template_name, filled)
+
+        return jsonify({
+            "filled": filled,
+            "from_db": bool(autofill_data),
+            "template": template_name
+        })
+    except RuntimeError as e:
+        error_msg = str(e)
+        if "GROQ_API_KEY" in error_msg:
+            return jsonify({"error": "AI service not configured. Please set GROQ_API_KEY environment variable."}), 500
+        return jsonify({"error": f"Runtime error: {error_msg}"}), 500
+    except Exception as e:
+        import traceback
+        traceback.print_exc()
+        return jsonify({"error": f"Failed to process form: {str(e)}"}), 500
 
 
 @app.route("/api/classify-hs", methods=["POST"])
 @login_required
 def api_classify_hs():
     """Classify product to HS code"""
-    data = request.get_json()
-    product_description = data.get("product_description", "")
-    top_n = data.get("top_n", 5)
+    try:
+        data = request.get_json()
+        product_description = data.get("product_description", "")
+        top_n = data.get("top_n", 5)
 
-    if not hs_classifier_available:
-        return jsonify({"error": "HS classifier not available"}), 503
+        if not hs_classifier_available:
+            return jsonify({"error": "HS classifier not available"}), 503
 
-    if not product_description or not product_description.strip():
-        return jsonify({"error": "Product description is required"}), 400
+        if not product_description or not product_description.strip():
+            return jsonify({"error": "Product description is required"}), 400
 
-    results = hs_classifier.classify(product_description, top_n=top_n)
+        results = hs_classifier.classify(product_description, top_n=top_n)
 
-    return jsonify({
-        "suggestions": results,
-        "count": len(results),
-        "product_description": product_description
-    })
+        return jsonify({
+            "suggestions": results,
+            "count": len(results),
+            "product_description": product_description
+        })
+    except Exception as e:
+        import traceback
+        traceback.print_exc()
+        return jsonify({"error": f"Failed to classify HS code: {str(e)}"}), 500
 
 
 @app.route("/api/templates", methods=["GET"])
