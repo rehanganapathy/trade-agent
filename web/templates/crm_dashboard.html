@@ -93,15 +93,38 @@
             100% { transform: translate(50px, 50px); }
         }
 
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            10%, 30%, 50%, 70%, 90% { transform: translateX(-10px); }
+            20%, 40%, 60%, 80% { transform: translateX(10px); }
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .fade-in {
+            animation: fadeIn 0.5s ease-out;
+        }
+
         .login-container {
-            background: var(--bg-secondary);
-            border-radius: 20px;
+            background: rgba(30, 41, 59, 0.95);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 24px;
             padding: 50px;
             width: 100%;
             max-width: 450px;
-            box-shadow: var(--shadow-xl);
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
             position: relative;
             z-index: 1;
+            transition: transform 0.3s ease;
+        }
+
+        .login-container:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 30px 60px -15px rgba(0, 0, 0, 0.6);
         }
 
         .login-header {
@@ -177,9 +200,18 @@
             width: 100%;
         }
 
-        .btn-primary:hover {
+        .btn-primary:hover:not(:disabled) {
             transform: translateY(-2px);
-            box-shadow: var(--shadow-lg);
+            box-shadow: 0 20px 25px -5px rgba(99, 102, 241, 0.4);
+        }
+
+        .btn-primary:active:not(:disabled) {
+            transform: translateY(0);
+        }
+
+        .btn-primary:disabled {
+            opacity: 0.7;
+            cursor: not-allowed;
         }
 
         .btn-secondary {
@@ -894,6 +926,32 @@
             }
         }
 
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        .spinner {
+            border: 3px solid rgba(255, 255, 255, 0.1);
+            border-top-color: var(--primary-color);
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            animation: spin 0.8s linear infinite;
+            margin: 20px auto;
+        }
+
+        /* Smooth page transitions */
+        .page-transition {
+            opacity: 0;
+            transform: translateY(20px);
+            transition: opacity 0.3s ease, transform 0.3s ease;
+        }
+
+        .page-transition.active {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
         .skeleton-text {
             height: 16px;
             margin-bottom: 10px;
@@ -1012,12 +1070,20 @@
             <form id="loginForm">
                 <div class="form-group">
                     <label class="form-label">Email Address</label>
-                    <input type="email" class="form-control" id="loginEmail" placeholder="admin@example.com" required>
+                    <input type="email" class="form-control" id="loginEmail" placeholder="admin@example.com" required autocomplete="email">
                 </div>
 
                 <div class="form-group">
                     <label class="form-label">Password</label>
-                    <input type="password" class="form-control" id="loginPassword" placeholder="••••••••" required>
+                    <input type="password" class="form-control" id="loginPassword" placeholder="••••••••" required autocomplete="current-password">
+                </div>
+
+                <div style="background: rgba(99, 102, 241, 0.1); border-left: 4px solid var(--primary-color); padding: 12px 16px; margin-bottom: 25px; border-radius: 8px; font-size: 13px; color: var(--text-secondary);">
+                    <div style="font-weight: 600; margin-bottom: 4px; color: var(--primary-color);">
+                        <i class="fas fa-info-circle"></i> Demo Credentials
+                    </div>
+                    <div>Email: <code style="background: rgba(0,0,0,0.2); padding: 2px 6px; border-radius: 4px; font-size: 12px;">admin@example.com</code></div>
+                    <div>Password: <code style="background: rgba(0,0,0,0.2); padding: 2px 6px; border-radius: 4px; font-size: 12px;">Admin123!</code></div>
                 </div>
 
                 <button type="submit" class="btn btn-primary">
@@ -1499,10 +1565,24 @@
 
             try {
                 const response = await fetch(`${API_BASE_URL}${endpoint}`, options);
+
+                // Handle 401 Unauthorized - token expired or invalid
+                if (response.status === 401) {
+                    authToken = null;
+                    currentUser = null;
+                    localStorage.removeItem('authToken');
+
+                    document.getElementById('appContainer').classList.add('hidden');
+                    document.getElementById('loginPage').classList.remove('hidden');
+
+                    showToast('Session Expired', 'Please login again', 'warning');
+                    throw new Error('Authentication required');
+                }
+
                 const result = await response.json();
 
                 if (!response.ok) {
-                    throw new Error(result.error || 'Request failed');
+                    throw new Error(result.error || result.message || 'Request failed');
                 }
 
                 return result;
@@ -1518,38 +1598,79 @@
 
             const email = document.getElementById('loginEmail').value;
             const password = document.getElementById('loginPassword').value;
+            const submitBtn = e.target.querySelector('button[type="submit"]');
+            const originalBtnText = submitBtn.innerHTML;
+
+            // Disable button and show loading state
+            submitBtn.disabled = true;
+            submitBtn.innerHTML = `
+                <i class="fas fa-spinner fa-spin"></i>
+                Signing in...
+            `;
 
             try {
                 const result = await apiRequest('/api/auth/login', 'POST', { email, password });
+
+                if (!result.token || !result.user) {
+                    throw new Error('Invalid response from server');
+                }
 
                 authToken = result.token;
                 currentUser = result.user;
                 localStorage.setItem('authToken', authToken);
 
-                showToast('Success', 'Login successful!', 'success');
+                showToast('Welcome Back!', `Hello ${result.user.first_name}`, 'success');
 
-                // Hide login page, show app
-                document.getElementById('loginPage').classList.add('hidden');
-                document.getElementById('appContainer').classList.remove('hidden');
+                // Hide login page, show app with animation
+                setTimeout(() => {
+                    document.getElementById('loginPage').classList.add('hidden');
+                    document.getElementById('appContainer').classList.remove('hidden');
 
-                // Update user info
-                updateUserInfo();
+                    // Update user info
+                    updateUserInfo();
 
-                // Load dashboard
-                loadDashboard();
+                    // Load dashboard
+                    loadDashboard();
+                }, 300);
+
             } catch (error) {
-                showToast('Login Failed', error.message, 'error');
+                showToast('Login Failed', error.message || 'Please check your credentials and try again', 'error');
+
+                // Shake animation for error feedback
+                const loginContainer = document.querySelector('.login-container');
+                loginContainer.style.animation = 'shake 0.5s';
+                setTimeout(() => {
+                    loginContainer.style.animation = '';
+                }, 500);
+            } finally {
+                // Re-enable button
+                submitBtn.disabled = false;
+                submitBtn.innerHTML = originalBtnText;
             }
         });
 
         // Logout
-        document.getElementById('logoutBtn').addEventListener('click', () => {
+        document.getElementById('logoutBtn').addEventListener('click', async () => {
+            try {
+                // Call logout endpoint to blacklist token
+                if (authToken) {
+                    await apiRequest('/api/auth/logout', 'POST');
+                }
+            } catch (error) {
+                console.error('Logout error:', error);
+                // Continue with client-side logout even if API call fails
+            }
+
             authToken = null;
             currentUser = null;
             localStorage.removeItem('authToken');
 
             document.getElementById('appContainer').classList.add('hidden');
             document.getElementById('loginPage').classList.remove('hidden');
+
+            // Clear form
+            document.getElementById('loginEmail').value = '';
+            document.getElementById('loginPassword').value = '';
 
             showToast('Logged Out', 'You have been logged out successfully', 'info');
         });
@@ -1603,14 +1724,20 @@
         // Load Dashboard
         async function loadDashboard() {
             try {
+                // Show loading state
+                const dashboardContent = document.getElementById('dashboardContent');
+                dashboardContent.classList.add('page-transition');
+
                 const data = await apiRequest('/api/analytics/dashboard');
                 dashboardData = data;
 
-                // Update KPI cards
-                document.getElementById('kpiRevenue').textContent = formatCurrency(data.metrics.total_revenue);
-                document.getElementById('kpiOrders').textContent = formatNumber(data.metrics.total_orders);
-                document.getElementById('kpiCompanies').textContent = formatNumber(data.metrics.total_companies);
-                document.getElementById('kpiShipments').textContent = formatNumber(data.metrics.pending_orders);
+                // Update KPI cards with animation
+                setTimeout(() => {
+                    document.getElementById('kpiRevenue').textContent = formatCurrency(data.metrics.total_revenue);
+                    document.getElementById('kpiOrders').textContent = formatNumber(data.metrics.total_orders);
+                    document.getElementById('kpiCompanies').textContent = formatNumber(data.metrics.total_companies);
+                    document.getElementById('kpiShipments').textContent = formatNumber(data.metrics.pending_orders);
+                }, 100);
 
                 // Update charts
                 updateRevenueChart();
@@ -1619,9 +1746,28 @@
                 // Update recent orders table
                 updateRecentOrdersTable(data.recent_orders);
 
+                // Activate transition
+                setTimeout(() => {
+                    dashboardContent.classList.add('active');
+                }, 50);
+
             } catch (error) {
                 console.error('Failed to load dashboard:', error);
-                showToast('Error', 'Failed to load dashboard data', 'error');
+                showToast('Dashboard Error', error.message || 'Failed to load dashboard data', 'error');
+
+                // Show error state
+                document.getElementById('recentOrdersTable').innerHTML = `
+                    <tr>
+                        <td colspan="6" style="text-align: center; padding: 40px; color: var(--danger-color);">
+                            <i class="fas fa-exclamation-triangle" style="font-size: 48px; margin-bottom: 16px; opacity: 0.5;"></i>
+                            <p>Failed to load dashboard data</p>
+                            <p style="font-size: 14px; color: var(--text-muted); margin-top: 8px;">${error.message}</p>
+                            <button onclick="loadDashboard()" class="btn btn-primary btn-sm" style="margin-top: 16px;">
+                                <i class="fas fa-redo"></i> Retry
+                            </button>
+                        </td>
+                    </tr>
+                `;
             }
         }
 
@@ -1756,13 +1902,26 @@
 
         // Load Companies
         async function loadCompanies() {
+            const tbody = document.getElementById('companiesTable');
+
             try {
+                // Show loading
+                tbody.innerHTML = '<tr><td colspan="6" style="text-align: center; padding: 40px;"><div class="spinner"></div></td></tr>';
+
                 const data = await apiRequest('/api/companies?per_page=50');
 
-                const tbody = document.getElementById('companiesTable');
-
                 if (!data.companies || data.companies.length === 0) {
-                    tbody.innerHTML = '<tr><td colspan="6" style="text-align: center; padding: 40px;">No companies found</td></tr>';
+                    tbody.innerHTML = `
+                        <tr>
+                            <td colspan="6" style="text-align: center; padding: 40px;">
+                                <i class="fas fa-building" style="font-size: 48px; color: var(--text-muted); opacity: 0.3; margin-bottom: 16px;"></i>
+                                <p style="color: var(--text-muted);">No companies found</p>
+                                <button onclick="showCreateCompanyModal()" class="btn btn-primary btn-sm" style="margin-top: 16px;">
+                                    <i class="fas fa-plus"></i> Add Your First Company
+                                </button>
+                            </td>
+                        </tr>
+                    `;
                     return;
                 }
 
@@ -1789,7 +1948,20 @@
 
             } catch (error) {
                 console.error('Failed to load companies:', error);
-                showToast('Error', 'Failed to load companies', 'error');
+                showToast('Error', error.message || 'Failed to load companies', 'error');
+
+                tbody.innerHTML = `
+                    <tr>
+                        <td colspan="6" style="text-align: center; padding: 40px; color: var(--danger-color);">
+                            <i class="fas fa-exclamation-triangle" style="font-size: 48px; margin-bottom: 16px; opacity: 0.5;"></i>
+                            <p>Failed to load companies</p>
+                            <p style="font-size: 14px; color: var(--text-muted); margin-top: 8px;">${error.message}</p>
+                            <button onclick="loadCompanies()" class="btn btn-primary btn-sm" style="margin-top: 16px;">
+                                <i class="fas fa-redo"></i> Retry
+                            </button>
+                        </td>
+                    </tr>
+                `;
             }
         }
 
