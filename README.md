@@ -40,12 +40,28 @@ This system uses **Groq LLM** and **local embeddings** to:
 - And more...
 
 ### 🌐 Modern Web Interface
-- Three-tab UI: Fill Forms, Manage Templates, View History
-- Real-time field preview
-- Template management
-- HS code classification tool
-- Copy/download results
-- Mobile responsive
+
+**Two Frontend Options:**
+
+1. **React Frontend (New!)** - Modern, optimized React application
+   - Built with React 18, TypeScript, and TailwindCSS
+   - Fast performance with Vite build tool
+   - Beautiful, responsive design with smooth animations
+   - Real-time form preview and AI status indicators
+   - Dashboard with statistics and recent activity
+   - Template management with visual editor
+   - Submission history with powerful search
+   - CRM dashboard for managing companies, leads, and products
+   - Export to PDF, Excel, and JSON formats
+   - See `frontend/README.md` for setup
+
+2. **Classic Web UI** - Vanilla JavaScript interface
+   - Three-tab UI: Fill Forms, Manage Templates, View History
+   - Real-time field preview
+   - Template management
+   - HS code classification tool
+   - Copy/download results
+   - Mobile responsive
 
 ### 🔌 RESTful API
 - `/api/fill` - Fill forms with optional HS classification
@@ -91,13 +107,31 @@ CHROMA_PERSIST_DIR=./chroma_db
 HTS_JSON_PATH=hts_current.json  # Path to HTS data file
 ```
 
-### Run the Web Application
+### Run the Application
+
+**Option 1: Backend Only (Classic UI)**
 
 ```bash
 python web_app.py
 ```
 
 Then open http://127.0.0.1:5000 in your browser.
+
+**Option 2: Backend + React Frontend (Recommended)**
+
+Terminal 1 - Start Backend:
+```bash
+python web_app.py
+```
+
+Terminal 2 - Start React Frontend:
+```bash
+cd frontend
+npm install  # First time only
+npm run dev
+```
+
+Then open http://localhost:3000 in your browser.
 
 ## 📖 Usage Examples
 
