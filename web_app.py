@@ -5,6 +5,7 @@ import json
 import os
 
 from flask import Flask, jsonify, render_template, request
+from flask_cors import CORS
 
 from agent import fill_form
 from vector_db import VectorDB, get_autofill_data
@@ -41,6 +42,15 @@ app = Flask(
     static_url_path="/static",
 
 )
+
+# Enable CORS for React frontend
+CORS(app, resources={
+    r"/*": {
+        "origins": ["http://localhost:3000", "http://localhost:5173"],
+        "methods": ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
+        "allow_headers": ["Content-Type", "Authorization"]
+    }
+})
 
 # Initialize vector DB
 try:
